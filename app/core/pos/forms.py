@@ -54,7 +54,31 @@ class ProductForm(ModelForm):
         except Exception as e:
             data['error'] = str(e)
         return data
+#KLN crud
+class MesaForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['numero_mesa'].widget.attrs['autofocus'] = True
 
+    class Meta:
+        model = Mesa
+        fields = '__all__'
+        widgets = {
+            'numero_mesa': forms.NumberInput(attrs={'placeholder': 'Ingrese el número de mesa: '}),
+            'disponibilidad': forms.CheckboxInput(attrs={'placeholder': '¿Está disponible?: '}),
+        }
+
+
+    def save(self, commit=True):
+        data = {}
+        try:
+            if self.is_valid():
+                super().save()
+            else:
+                data['error'] = self.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data
 
 class ClientForm(ModelForm):
     def __init__(self, *args, **kwargs):

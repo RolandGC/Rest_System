@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=D:\DATOS C 2021\Solo desarrollo web\POLARIS\conaforp3\Conaforp\venv
+set VIRTUAL_ENV=C:\Users\angel\Documents\Polaris GitHub\Sistema restaurante\rest_system\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

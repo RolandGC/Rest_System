@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="D:\DATOS C 2021\Solo desarrollo web\POLARIS\conaforp3\Conaforp\venv"
+VIRTUAL_ENV="C:\Users\angel\Documents\Polaris GitHub\Sistema restaurante\rest_system\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

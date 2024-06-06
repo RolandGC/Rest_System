@@ -8,6 +8,8 @@ from core.pos.views.scm.product.views import *
 from core.pos.views.scm.category.views import *
 from core.pos.views.crm.client.views import *
 from core.pos.views.crm.sale.print.views import *
+from core.pos.views.crm.sale.mesa.views import *
+from core.pos.views.crm.sale.orderitem.views import OrderItemView  # Importa OrderItemView
 
 urlpatterns = [
     # company
@@ -39,7 +41,12 @@ urlpatterns = [
     path('crm/sale/admin/delete/<int:pk>/', SaleAdminDeleteView.as_view(), name='sale_admin_delete'),
     path('crm/sale/print/voucher/<int:pk>/', SalePrintVoucherView.as_view(), name='sale_print_ticket'),
     path('crm/sale/client/', SaleClientListView.as_view(), name='sale_client_list'),
-    
-    
-
+    # status/mesa
+    # path('crm/sale/mesa/', MesaListView.as_view(), name='mesa_list'),
+    # path('crm/sale/mesa/add/', MesaCreateView.as_view(), name='mesa_create'),
+    # path('crm/sale/mesa/update/<int:pk>/', MesaUpdateView.as_view(), name='mesa_update'),
+    # path('crm/sale/mesa/delete/<int:pk>/', MesaDeleteView.as_view(), name='mesa_delete'),
+   
+    # Vista/orden
+    path('ruta/a/tu/vista/', OrderItemView.as_view(), name='nombre_de_la_vista'),
 ]

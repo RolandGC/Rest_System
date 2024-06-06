@@ -1,4 +1,4 @@
-#!D:\DATOS C 2021\Solo desarrollo web\POLARIS\conaforp3\Conaforp\venv\Scripts\python.exe
+#!C:\Users\angel\Documents\Polaris GitHub\Sistema restaurante\rest_system\venv\Scripts\python.exe
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 

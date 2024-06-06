@@ -341,18 +341,22 @@ class PaymentsCtaCollect(models.Model):
     # id
     # total
     # tipo_pedido
+    # estado_pedido (bool)
+    # mesa   --> puede aceptar null
+    
 
     
 # pedido_mesa
     # id
     # id_producto
     # id mesa
-
+    
 
 # class Mesa
     # id
     # numero_mesa
-    # disponibilidad (True or False)
+    # disponibilidad (True or False) clic generar pedido: Form by modal
+
 
 
 

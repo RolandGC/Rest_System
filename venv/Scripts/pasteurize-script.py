@@ -1,4 +1,4 @@
-#!"D:\DATOS C 2021\Solo desarrollo web\POLARIS\conaforp3\Conaforp\venv\Scripts\python.exe"
+#!C:\POLARISS\codigo\dia24\Rest_System\venv\Scripts\python.exe
 # EASY-INSTALL-ENTRY-SCRIPT: 'future==0.18.2','console_scripts','pasteurize'
 import re
 import sys

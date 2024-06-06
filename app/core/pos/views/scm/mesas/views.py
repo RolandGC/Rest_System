@@ -3,12 +3,14 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from core.pos.forms import Mesa, MesaForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse, HttpResponse
+from django.shortcuts import get_object_or_404
 import json
 
 class MesasListView(ListView):
     model = Mesa
     template_name = 'scm/mesas/list.html'
     context_object_name = "mesas"
+    ordering = ['numero_mesa']
     #permission_required = 'view_mesas'
 
     def get_context_data(self, **kwargs):
@@ -29,8 +31,8 @@ class MesasCreateView(CreateView):
         try:
             type = self.request.POST['type']
             obj = self.request.POST['obj'].strip()
-            if type == 'name':
-                if Mesa.objects.filter(name__iexact=obj):
+            if type == 'numero_mesa':
+                if Mesa.objects.filter(numero_mesa__iexact=obj):
                     data['valid'] = False
         except:
             pass
@@ -74,13 +76,13 @@ class MesasUpdateView(UpdateView):
             type = self.request.POST['type']
             obj = self.request.POST['obj'].strip()
             id = self.get_object().id
-            if type == 'name':
-                if Mesa.objects.filter(name__iexact=obj).exclude(id=id):
+            if type == 'numero_mesa':
+                if Mesa.objects.filter(numero_mesa__iexact=obj).exclude(id=id):
                     data['valid'] = False
         except:
             pass
         return JsonResponse(data)
-
+    
     def post(self, request, *args, **kwargs):
         data = {}
         action = request.POST['action']
@@ -95,12 +97,21 @@ class MesasUpdateView(UpdateView):
             data['error'] = str(e)
         return HttpResponse(json.dumps(data), content_type='application/json')
 
+    def get_object(self, queryset=None):
+        id = self.kwargs.get('pk')
+        return get_object_or_404(Mesa, id=id)
+
+    def get_queryset(self):
+        return Mesa.objects.all()
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['list_url'] = self.success_url
         context['title'] = 'Edición de una Categoría'
         context['action'] = 'edit'
         return context
+    
+
     
 class MesasDeleteView(DeleteView):
     model = Mesa
@@ -117,6 +128,18 @@ class MesasDeleteView(DeleteView):
             data['error'] = str(e)
         return HttpResponse(json.dumps(data), content_type='application/json')
 
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['title'] = 'Notificación de eliminación'
+    #     context['list_url'] = self.success_url
+    #     return context
+
+    def get_object(self, queryset=None):
+        id = self.kwargs.get('pk')
+        return get_object_or_404(Mesa, id=id)
+
+    def get_queryset(self):
+        return Mesa.objects.all()
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Notificación de eliminación'

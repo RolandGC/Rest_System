@@ -342,7 +342,7 @@ class PaymentsCtaCollect(models.Model):
     # total
     # tipo_pedido
     # estado_pedido (bool)
-    # mesa   --> puede aceptar null
+    # mesa   --> puede aceptar null      id mesa
     
 
     
@@ -350,7 +350,7 @@ class PaymentsCtaCollect(models.Model):
     # id
     # id_producto
     # id mesa
-    
+
 
 # class Mesa
     # id

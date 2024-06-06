@@ -1,17 +1,32 @@
 <!-- Lista de Mesas -->
 {% extends 'list.html' %}
 {% load static %}
+<<<<<<< HEAD
 
+=======
+{% block head_body %}
+    <link rel="stylesheet" href="{% static 'scm/mesas/css/style.css' %}"/> 
+    <script src="{% static 'scm/mesas/js/modal.js' %}"></script>
+{% endblock %}
+>>>>>>> bd36b4b623b5ae9b7eab3c09f41effa8418e5f1a
 {% block content %}
-<div class="card">
+<div class="card contenedor-modal">
     <div class="card-header">
         <h3 class="card-title">
             <i class="fas fa-search"></i>
             Mesas
         </h3>
     </div>
-    <div class="card-body d-flex flex-wrap g-5" style="gap:20px">
+    <div style="margin-top: 20px; margin-left:20px">
+        {% if create_url %}
+            <a href="/pos/scm/mesa/add" class="btn btn-primary btn-flat">
+                <i class="fas fa-plus"></i> Añadir mesa
+            </a>
+        {% endif %}
+    </div>
+    <div class="d-flex flex-wrap mx-auto" style="gap:30px 20px;max-width:1000px ;margin-top: 40px; margin-bottom:30px">
         {% for mesa in mesas %}
+<<<<<<< HEAD
             <div class="mx-auto">
                 <h4 class="text-center">Mesa N° {{ mesa.numero_mesa }}</h4>
                 {% if mesa.disponibilidad %}
@@ -20,10 +35,30 @@
                     <img src="{% static 'img/mesa-red.png' %}" alt="" width="250">
                 {% endif %}
                 <button class="btn btn-primary btn-hacer-pedido" data-mesa-id="{{ mesa.id }}">Hacer Pedido</button>
+=======
+            <div class="mx-auto card-mesa position-relative" data-mesa-id="{{mesa.numero_mesa}}">
+                <h4 class="text-center">Mesa N° {{mesa.numero_mesa}}</h4>
+                {% if mesa.disponibilidad %}
+                    <img class="card-mesa mx-auto" src="{% static '/img/mesa-green.png' %}" alt="" width="250">
+                {% else %}
+                    <img class="card-mesa mx-auto" src="{% static '/img/mesa-red.png' %}" alt="" width="250">
+                {% endif %}
+                <div class="position-absolute d-flex justify-content-center" style="width: 245px; margin: 0 auto;bottom:18px; column-gap:20px">
+                    <a href="{% url 'mesa_update' mesa.id %}" data-toggle="tooltip" title="Editar registro" class="btn btn-warning btn-xs btn-flat">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="{% url 'mesa_delete' mesa.id %}" rel="delete" data-toggle="tooltip" title="Eliminar registro"
+                       class="btn btn-danger btn-xs btn-flat">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </div>
+>>>>>>> bd36b4b623b5ae9b7eab3c09f41effa8418e5f1a
             </div>
         {% endfor %}
     </div>
+    
 </div>
+<<<<<<< HEAD
 
 <!-- Modal para hacer pedido -->
 <div class="modal fade" id="modal-pedido" tabindex="-1" aria-labelledby="modal-pedido-label" aria-hidden="true">
@@ -47,6 +82,20 @@
         </div>
     </div>
 </div>
+=======
+<section id="myModal" class="modal">
+    <div class="modal-contenedor">
+        <div class="modal-content">
+            <div class="d-flex justify-content-end">
+                <button class="close-modal btn btn-danger"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-form">
+                <h4>Modal</h4>
+            </div>
+        </div>
+    </div>
+</section>
+>>>>>>> bd36b4b623b5ae9b7eab3c09f41effa8418e5f1a
 {% endblock %}
 
 <!-- JavaScript -->

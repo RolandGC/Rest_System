@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #!C:\Users\angel\Documents\Polaris GitHub\Sistema restaurante\rest_system\venv\Scripts\python.exe
+=======
+#!C:\POLARISS\codigo\dia24\Rest_System\venv\Scripts\python.exe
+>>>>>>> bd36b4b623b5ae9b7eab3c09f41effa8418e5f1a
 
 ##############################################################################
 #

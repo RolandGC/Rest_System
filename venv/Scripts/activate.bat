@@ -8,7 +8,11 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
+<<<<<<< HEAD
 set VIRTUAL_ENV=C:\Users\angel\Documents\Polaris GitHub\Sistema restaurante\rest_system\venv
+=======
+set VIRTUAL_ENV=C:\POLARISS\codigo\dia24\Rest_System\venv
+>>>>>>> bd36b4b623b5ae9b7eab3c09f41effa8418e5f1a
 
 if not defined PROMPT set PROMPT=$P$G
 

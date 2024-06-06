@@ -337,6 +337,14 @@ class PaymentsCtaCollect(models.Model):
 
 
 # CAMBIOS DE KOLYN, ANGEL, KOLYN
+class Mesa(models.Model):
+    
+    numero_mesa=models.IntegerField()
+    disponibilidad=models.BooleanField(default=True)
+
+    def __str__(self):
+        return f'Mesa N° {self.numero_mesa}'
+
 # class Pedido
     # id
     # total

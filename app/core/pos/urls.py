@@ -8,8 +8,6 @@ from core.pos.views.scm.product.views import *
 from core.pos.views.scm.category.views import *
 from core.pos.views.crm.client.views import *
 from core.pos.views.crm.sale.print.views import *
-from core.pos.views.crm.sale.mesa.views import *
-from core.pos.views.crm.sale.orderitem.views import OrderItemView  # Importa OrderItemView
 
 urlpatterns = [
     # company
@@ -25,6 +23,11 @@ urlpatterns = [
     path('scm/product/update/<int:pk>/', ProductUpdateView.as_view(), name='product_update'),
     path('scm/product/delete/<int:pk>/', ProductDeleteView.as_view(), name='product_delete'),
     path('scm/product/export/excel/', ProductExportExcelView.as_view(), name='product_export_excel'),
+    # KLN crud
+    path('scm/mesa/', MesasListView.as_view(), name='mesa_list'),
+    path('scm/mesa/add/', MesasCreateView.as_view(), name='mesa_create'),
+    path('scm/mesa/update/<int:pk>/', MesasUpdateView.as_view(), name='mesa_update'),
+    path('scm/mesa/delete/<int:pk>/', MesasDeleteView.as_view(), name='mesa_delete'),
     # ctascollect
     path('frm/ctas/collect/', CtasCollectListView.as_view(), name='ctascollect_list'),
     path('frm/ctas/collect/add/', CtasCollectCreateView.as_view(), name='ctascollect_create'),

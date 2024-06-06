@@ -4,6 +4,8 @@ from core.pos.forms import Mesa, MesaForm
 from django.urls import reverse_lazy
 from django.http import JsonResponse, HttpResponse
 import json
+from django.shortcuts import render
+from django.views.generic import View
 
 class MesasListView(ListView):
     model = Mesa
@@ -122,3 +124,8 @@ class MesasDeleteView(DeleteView):
         context['title'] = 'Notificación de eliminación'
         context['list_url'] = self.success_url
         return context
+    
+class PedidoMesasView(View):
+    def get(self, request):
+        mesas = Mesa.objects.all()
+        return render(request, 'scm/mesas/pedido.html', {'mesas': mesas})

@@ -2,18 +2,18 @@ import math
 import os
 import re
 from datetime import datetime
-
+from django.shortcuts import get_object_or_404
 from django.db import models
 from django.db.models import FloatField
 from django.db.models import Sum
+from django.db import models
 from django.db.models.functions import Coalesce
 from django.forms import model_to_dict
-
+from django.views import View
 from config import settings
 from core.pos.choices import payment_condition, payment_method, voucher
 from core.user.models import User
-
-
+from django.http import JsonResponse
 
 class Company(models.Model):
     name = models.CharField(max_length=50, verbose_name='Nombre')
@@ -344,24 +344,3 @@ class Mesa(models.Model):
 
     def __str__(self):
         return f'Mesa N° {self.numero_mesa}'
-
-# class Pedido
-    # id
-    # total
-    # tipo_pedido
-
-    
-# pedido_mesa
-    # id
-    # id_producto
-    # id mesa
-
-
-# class Mesa
-    # id
-    # numero_mesa
-    # disponibilidad (True or False)
-
-
-
-

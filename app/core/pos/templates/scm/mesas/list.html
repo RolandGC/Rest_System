@@ -1,25 +1,83 @@
+<!-- Lista de Mesas -->
 {% extends 'list.html' %}
 {% load static %}
+
 {% block content %}
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">
             <i class="fas fa-search"></i>
-            {{ title }}
+            Mesas
         </h3>
     </div>
     <div class="card-body d-flex flex-wrap g-5" style="gap:20px">
         {% for mesa in mesas %}
-            <div class="mx-auto" data-mesa-id="{{mesa.id}}">
-                <h4 class="text-center">Mesa N° {{mesa.numero_mesa}}</h4>
+            <div class="mx-auto">
+                <h4 class="text-center">Mesa N° {{ mesa.numero_mesa }}</h4>
                 {% if mesa.disponibilidad %}
-                    <img src="{% static '/img/mesa-green.png' %}" alt="" width="250">
+                    <img src="{% static 'img/mesa-green.png' %}" alt="" width="250">
                 {% else %}
-                    <img src="{% static '/img/mesa-red.png' %}" alt="" width="250">
+                    <img src="{% static 'img/mesa-red.png' %}" alt="" width="250">
                 {% endif %}
+                <button class="btn btn-primary btn-hacer-pedido" data-mesa-id="{{ mesa.id }}">Hacer Pedido</button>
             </div>
         {% endfor %}
     </div>
 </div>
+
+<!-- Modal para hacer pedido -->
+<div class="modal fade" id="modal-pedido" tabindex="-1" aria-labelledby="modal-pedido-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-pedido-label">Realizar Pedido</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="pedido-content">
+                <!-- Contenido del pedido cargado dinámicamente -->
+                <form id="pedido-form" method="post">
+                    {% csrf_token %}
+                    <!-- Aquí se mostrará el contenido del formulario cargado dinámicamente -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary" form="pedido-form">Enviar Pedido</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
+<!-- JavaScript -->
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+// Función para cargar dinámicamente el contenido del pedido
+function cargarContenidoPedido(mesaId) {
+    // Realizar una solicitud AJAX para obtener el contenido del pedido desde la vista MesasOrderView
+    $.ajax({
+        url: `/scm/mesa/order/${mesaId}/`,
+        method: 'POST',
+        data: {
+            // Aquí puedes enviar cualquier otro dato necesario para crear el pedido
+        },
+        success: function(response) {
+            $('#pedido-content').html(response.form_html);
+            $('#modal-pedido').modal('show');
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al cargar el contenido del pedido:', error);
+        }
+    });
+}
+
+// Asociar evento de clic a los botones "Hacer Pedido"
+$(document).ready(function() {
+    $('.btn-hacer-pedido').click(function() {
+        const mesaId = $(this).data('mesa-id');
+        cargarContenidoPedido(mesaId);
+    });
+});
+</script>
+{% endblock %}z

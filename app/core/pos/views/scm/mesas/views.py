@@ -314,24 +314,8 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
             data['error'] = str(e)
         return HttpResponse(json.dumps(data), content_type='application/json')
 
-<<<<<<< HEAD
-    @method_decorator(csrf_exempt)
-    def get_products(request):
-        data = []
-        try:
-            term = request.GET.get('term', '')
-            search = Product.objects.filter(Q(name__icontains=term)).order_by('name')[:10]
-            for product in search:
-                item = product.toJSON()
-                item['value'] = product.name
-                data.append(item)
-        except Exception as e:
-            data.append({'error': str(e)})
-        return JsonResponse(data, safe=False)
-=======
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Notificación de eliminación'
         context['list_url'] = self.success_url
         return context
->>>>>>> 7d4194869f51c9612dcc7b162fba6dcaceae7218

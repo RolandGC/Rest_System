@@ -118,6 +118,7 @@
 }
 .ui-menu .ui-menu {
 	position: absolute;
+	z-index: 200 !important;
 }
 .ui-menu .ui-menu-item {
 	margin: 0;

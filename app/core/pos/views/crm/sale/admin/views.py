@@ -89,7 +89,7 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
         print(request.POST)
         action = request.POST['action']
         print(action)
-        print("ventas")
+        print("admin ventas")
         data = {}
         try:
             if action == 'add':
@@ -151,11 +151,10 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
 
                     data = {'id': sale.id}
             elif action == 'search_products':
-                print("xdddd")
                 ids = json.loads(request.POST['ids'])
                 data = []
                 term = request.POST['term']
-                search = Product.objects.filter(Q(category__inventoried=True)).exclude(
+                search = Product.objects.filter(Q(category__inventoried=False)).exclude(
                     id__in=ids).order_by('name')
                 if len(term):
                     search = search.filter(name__icontains=term)

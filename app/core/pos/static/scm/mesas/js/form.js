@@ -1,4 +1,3 @@
-console.log("xd")
 document.addEventListener('DOMContentLoaded', function (e) {
     const form = document.getElementById('frmForm');
     const fv = FormValidation.formValidation(form, {

@@ -1,4 +1,4 @@
-
+let url="/pos/crm/sale/admin/add/"
 var current_date;
 
 var fvSale;
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         },
                         digits: {},
                         remote: {
-                            url: pathname,
+                            url: url,
                             data: function () {
                                 return {
                                     obj: frmClient.querySelector('[name="dni"]').value,
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         },
                         digits: {},
                         remote: {
-                            url: pathname,
+                            url: url,
                             data: function () {
                                 return {
                                     obj: frmClient.querySelector('[name="mobile"]').value,
@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         .on('core.form.valid', function () {
             var parameters = new FormData(fvClient.form);
             parameters.append('action', 'create_client');
-            submit_formdata_with_ajax('Notificación', '¿Estas seguro de realizar la siguiente acción?', pathname,
+            submit_formdata_with_ajax('Notificación', '¿Estas seguro de realizar la siguiente acción?', url,
                 parameters,
                 function (request) {
                     var newOption = new Option(request.user.full_name + ' / ' + request.user.dni, request.id, false, true);
@@ -494,7 +494,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
             let urlrefresh = fvSale.form.getAttribute('data-url');
             submit_formdata_with_ajax('Notificación',
                 '¿Estas seguro de realizar la siguiente acción?',
-                pathname,
+                url,
                 parameters,
                 function (request) {
                     dialog_action('Notificación', '¿Desea Imprimir el Comprobante?', function () {
@@ -552,8 +552,8 @@ $(function () {
     input_searchproducts.autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "/pos/crm/sale/admin/add/",
-                //url: pathname,
+                //url: "/pos/crm/sale/admin/add/",
+                url: url,
                 data: {
                     'action': 'search_products',
                     'term': request.term,
@@ -568,7 +568,8 @@ $(function () {
 
                 },
                 success: function (data) {
-                    response(data);
+                    console.log(data)
+                    renderResults(data)
                 }
             });
         },
@@ -582,6 +583,25 @@ $(function () {
             $(this).val('').focus();
         }
     });
+
+    function renderResults(data) {
+        $('.autocomplete-results').empty();
+    
+        // Renderiza los nuevos resultados
+        data.forEach(function(item) {
+            var resultItem = $('<div class="autocomplete-result"></div>');
+            resultItem.text(item.name);
+            resultItem.data('product', item);
+            resultItem.appendTo('.autocomplete-results');
+    
+            resultItem.on('click', function() {
+                var product = $(this).data('product');
+                console.log('Producto seleccionado:', product);
+                vents.add_product(item);
+            });
+        });
+    }
+
 
     $('.btnClearProducts').on('click', function () {
         input_searchproducts.val('').focus();
@@ -633,7 +653,7 @@ $(function () {
             // autoWidth: false,
             destroy: true,
             ajax: {
-                url: pathname,
+                url: url,
                 type: 'POST',
                 headers: {
                     'X-CSRFToken': csrftoken
@@ -706,7 +726,7 @@ $(function () {
             headers: {
                 'X-CSRFToken': csrftoken
             },
-            url: pathname,
+            url: url,
             data: function (params) {
                 var queryParameters = {
                     term: params.term,
@@ -921,7 +941,7 @@ $(function () {
         };
 
         $.ajax({
-            url: pathname,
+            url: url,
             data: parameters,
             type: 'POST',
             headers: {

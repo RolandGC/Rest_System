@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // #selctores propios
     let contenedorMesas=document.querySelector('.contenedor-modal');
-    console.log(contenedorMesas)
+    console.log('contenedorMesas: ', contenedorMesas);
+
     let modal = document.querySelector('#myModal');
     let btnCloseModal = document.querySelector('.close-modal');
     contenedorMesas.addEventListener('click', (e) => {

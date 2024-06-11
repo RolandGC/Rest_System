@@ -15,7 +15,7 @@ from functools import partial
 from io import BytesIO
 
 from . import Context, ImageSurface, constants, dlopen
-from ._generated.ffi_pixbuf import ffi
+from .ffi import ffi_pixbuf as ffi
 
 __all__ = ['decode_to_image_surface']
 
@@ -48,7 +48,7 @@ class ImageLoadingError(ValueError):
 
 
 def handle_g_error(error, return_value):
-    """Convert a :c:type:`GError**` to a Python :exception:`ImageLoadingError`,
+    """Convert a ``GError**`` to a Python :exception:`ImageLoadingError`,
     and raise it.
 
     """
@@ -65,7 +65,7 @@ def handle_g_error(error, return_value):
 
 
 class Pixbuf(object):
-    """Wrap a :c:type:`GdkPixbuf` pointer and simulate methods."""
+    """Wrap a ``GdkPixbuf`` pointer and simulate methods."""
     def __init__(self, pointer):
         gobject.g_object_ref(pointer)
         self._pointer = ffi.gc(pointer, gobject.g_object_unref)

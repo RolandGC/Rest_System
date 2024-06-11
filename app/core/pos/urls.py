@@ -28,6 +28,7 @@ urlpatterns = [
     path('scm/mesa/add/', MesasCreateView.as_view(), name='mesa_create'),
     path('scm/mesa/update/<int:pk>/', MesasUpdateView.as_view(), name='mesa_update'),
     path('scm/mesa/delete/<int:pk>/', MesasDeleteView.as_view(), name='mesa_delete'),
+    path('scm/product/list/', ProductListView.as_view(), name='product_list'),  # Nueva URL para obtener productos
     # ctascollect
     path('frm/ctas/collect/', CtasCollectListView.as_view(), name='ctascollect_list'),
     path('frm/ctas/collect/add/', CtasCollectCreateView.as_view(), name='ctascollect_create'),

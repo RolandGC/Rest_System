@@ -1,20 +1,21 @@
-<!-- Lista de Mesas -->
 {% extends 'list.html' %}
 {% load static %}
-<<<<<<< HEAD
 
-=======
 {% block head_body %}
     <link rel="stylesheet" href="{% static 'scm/mesas/css/style.css' %}"/> 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="{% static 'scm/mesas/js/modal.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 {% endblock %}
->>>>>>> bd36b4b623b5ae9b7eab3c09f41effa8418e5f1a
+
 {% block content %}
 <div class="card contenedor-modal">
     <div class="card-header">
         <h3 class="card-title">
             <i class="fas fa-search"></i>
-            Mesas
+            {{ title }}
         </h3>
     </div>
     <div style="margin-top: 20px; margin-left:20px">
@@ -26,16 +27,6 @@
     </div>
     <div class="d-flex flex-wrap mx-auto" style="gap:30px 20px;max-width:1000px ;margin-top: 40px; margin-bottom:30px">
         {% for mesa in mesas %}
-<<<<<<< HEAD
-            <div class="mx-auto">
-                <h4 class="text-center">Mesa N° {{ mesa.numero_mesa }}</h4>
-                {% if mesa.disponibilidad %}
-                    <img src="{% static 'img/mesa-green.png' %}" alt="" width="250">
-                {% else %}
-                    <img src="{% static 'img/mesa-red.png' %}" alt="" width="250">
-                {% endif %}
-                <button class="btn btn-primary btn-hacer-pedido" data-mesa-id="{{ mesa.id }}">Hacer Pedido</button>
-=======
             <div class="mx-auto card-mesa position-relative" data-mesa-id="{{mesa.numero_mesa}}">
                 <h4 class="text-center">Mesa N° {{mesa.numero_mesa}}</h4>
                 {% if mesa.disponibilidad %}
@@ -52,81 +43,55 @@
                         <i class="fas fa-trash"></i>
                     </a>
                 </div>
->>>>>>> bd36b4b623b5ae9b7eab3c09f41effa8418e5f1a
             </div>
         {% endfor %}
     </div>
-    
 </div>
-<<<<<<< HEAD
 
-<!-- Modal para hacer pedido -->
-<div class="modal fade" id="modal-pedido" tabindex="-1" aria-labelledby="modal-pedido-label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal-pedido-label">Realizar Pedido</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="pedido-content">
-                <!-- Contenido del pedido cargado dinámicamente -->
-                <form id="pedido-form" method="post">
-                    {% csrf_token %}
-                    <!-- Aquí se mostrará el contenido del formulario cargado dinámicamente -->
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary" form="pedido-form">Enviar Pedido</button>
-            </div>
-        </div>
-    </div>
-</div>
-=======
 <section id="myModal" class="modal">
     <div class="modal-contenedor">
         <div class="modal-content">
             <div class="d-flex justify-content-end">
                 <button class="close-modal btn btn-danger"><i class="fas fa-times"></i></button>
             </div>
-            <div class="modal-form">
-                <h4>Modal</h4>
+            <!-- Pedido -->
+            <div id="myModalPedido" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <b><i class="fas fa-boxes"></i> Realizar Pedido</b>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="frmPedido" method="post" data-url="{% url 'sale_admin_create' %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="producto">Producto:</label>
+                                    <select name="producto" id="producto" class="form-control">
+                                        <!-- Aquí se agregarían las opciones de productos disponibles -->
+                                        <!-- Ejemplo: <option value="1">Producto 1</option> -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cantidad">Cantidad:</label>
+                                    <input type="number" name="cantidad" id="cantidad" class="form-control">
+                                </div>
+                                <!-- Puedes agregar más campos según sea necesario -->
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" id="btnRealizarPedido">Realizar Pedido</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
         </div>
     </div>
 </section>
->>>>>>> bd36b4b623b5ae9b7eab3c09f41effa8418e5f1a
 {% endblock %}
-
-<!-- JavaScript -->
-{% block javascript %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-// Función para cargar dinámicamente el contenido del pedido
-function cargarContenidoPedido(mesaId) {
-    // Realizar una solicitud AJAX para obtener el contenido del pedido desde la vista MesasOrderView
-    $.ajax({
-        url: `/scm/mesa/order/${mesaId}/`,
-        method: 'POST',
-        data: {
-            // Aquí puedes enviar cualquier otro dato necesario para crear el pedido
-        },
-        success: function(response) {
-            $('#pedido-content').html(response.form_html);
-            $('#modal-pedido').modal('show');
-        },
-        error: function(xhr, status, error) {
-            console.error('Error al cargar el contenido del pedido:', error);
-        }
-    });
-}
-
-// Asociar evento de clic a los botones "Hacer Pedido"
-$(document).ready(function() {
-    $('.btn-hacer-pedido').click(function() {
-        const mesaId = $(this).data('mesa-id');
-        cargarContenidoPedido(mesaId);
-    });
-});
-</script>
-{% endblock %}z

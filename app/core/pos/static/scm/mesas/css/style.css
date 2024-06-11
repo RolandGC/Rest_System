@@ -15,9 +15,10 @@
 }
 #myModal .modal-content {
     background-color: white;
-    max-width: 400px;
+    max-width: 1600px;
     padding: 20px;
     border-radius: 10px;
+    width: 98%;
 }
 .mensaje1 div{
     display: flex;

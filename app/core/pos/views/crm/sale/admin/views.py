@@ -9,7 +9,8 @@ from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, FormView
 from weasyprint import HTML, CSS
-
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from core.pos.forms import *
 from core.reports.forms import ReportForm
 from core.security.mixins import PermissionMixin
@@ -49,7 +50,7 @@ class SaleAdminListView(PermissionMixin, FormView):
         context['title'] = 'Listado de Ventas'
         return context
 
-
+#@method_decorator(csrf_exempt, name='dispatch')
 class SaleAdminCreateView(PermissionMixin, CreateView):
     model = Sale
     template_name = 'crm/sale/admin/create.html'
@@ -85,7 +86,10 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
         return form
 
     def post(self, request, *args, **kwargs):
+        print(request.POST)
         action = request.POST['action']
+        print(action)
+        print("ventas")
         data = {}
         try:
             if action == 'add':
@@ -147,10 +151,11 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
 
                     data = {'id': sale.id}
             elif action == 'search_products':
+                print("xdddd")
                 ids = json.loads(request.POST['ids'])
                 data = []
                 term = request.POST['term']
-                search = Product.objects.filter(Q(category__inventoried=False)).exclude(
+                search = Product.objects.filter(Q(category__inventoried=True)).exclude(
                     id__in=ids).order_by('name')
                 if len(term):
                     search = search.filter(name__icontains=term)

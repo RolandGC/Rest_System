@@ -10,12 +10,13 @@
 .modal-contenedor{
     display: flex;
     justify-content: center;
-    align-items: center;
+    /*align-items: center;*/
     height: 100vh;
 }
 #myModal .modal-content {
     background-color: white;
-    max-width: 400px;
+    max-width: 1300px;
+    width:98%;
     padding: 20px;
     border-radius: 10px;
 }

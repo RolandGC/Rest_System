@@ -6,16 +6,22 @@
     right: 0;
     left: 0;
     bottom: 0;
+    z-index: 1;
 }
 .modal-contenedor{
     display: flex;
     justify-content: center;
-    align-items: center;
+    /*align-items: center;*/
     height: 100vh;
 }
 #myModal .modal-content {
     background-color: white;
+<<<<<<< HEAD
     max-width: 1600px;
+=======
+    max-width: 1300px;
+    width:98%;
+>>>>>>> 7d4194869f51c9612dcc7b162fba6dcaceae7218
     padding: 20px;
     border-radius: 10px;
     width: 98%;

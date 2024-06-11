@@ -1,9 +1,17 @@
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
+from core.reports.forms import ReportForm
+from core.pos.forms import SaleForm
 #from core.security.mixins import PermissionMixin
 from core.pos.forms import Mesa, MesaForm
+from core.pos.forms import *
 from django.urls import reverse_lazy
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
+from django.template.loader import get_template
+from django.contrib.auth.models import Group
+from django.db.models import Q
+from django.db import transaction
+from weasyprint import HTML, CSS
 import json
 from django.shortcuts import render
 from django.views.generic import View
@@ -18,8 +26,10 @@ from django.utils.decorators import method_decorator
 
 
 
-class MesasListView(ListView):
+class MesasListView(ListView,FormView):
+    #LISTAR MESAS
     model = Mesa
+    form_class = SaleForm
     template_name = 'scm/mesas/list.html'
     context_object_name = "mesas"
     ordering = ['numero_mesa']
@@ -28,9 +38,43 @@ class MesasListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['create_url'] = reverse_lazy('mesa_create')
+        context['frmClient'] = ClientForm()
+        context['action'] = 'add'
         context['title'] = 'Listado de Mesas'
+        context['igv'] = Company.objects.first().get_igv()
         return context
     
+    #LISTAR MODAL
+    #template_name = 'crm/sale/admin/list.html'
+    #permission_required = 'view_sale'
+    
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        action = request.POST['action']
+        print()
+        print(action)
+        try:
+            if action == 'search':
+                data = []
+                start_date = request.POST['start_date']
+                end_date = request.POST['end_date']
+                search = Sale.objects.filter()
+                if len(start_date) and len(end_date):
+                    search = search.filter(date_joined__range=[start_date, end_date])
+                for i in search:
+                    data.append(i.toJSON())
+            elif action == 'search_detproducts':
+                data = []
+                for det in SaleDetail.objects.filter(sale_id=request.POST['id']):
+                    data.append(det.toJSON())
+            else:
+                data['error'] = 'No ha ingresado una opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return HttpResponse(json.dumps(data), content_type='application/json')
+
+
 class MesasCreateView(CreateView):
     model = Mesa
     template_name = 'scm/mesas/create.html'
@@ -122,8 +166,6 @@ class MesasUpdateView(UpdateView):
         context['title'] = 'Edición de una Categoría'
         context['action'] = 'edit'
         return context
-    
-
     
 class MesasDeleteView(DeleteView):
     model = Mesa
@@ -272,6 +314,7 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
             data['error'] = str(e)
         return HttpResponse(json.dumps(data), content_type='application/json')
 
+<<<<<<< HEAD
     @method_decorator(csrf_exempt)
     def get_products(request):
         data = []
@@ -285,3 +328,10 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
         except Exception as e:
             data.append({'error': str(e)})
         return JsonResponse(data, safe=False)
+=======
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Notificación de eliminación'
+        context['list_url'] = self.success_url
+        return context
+>>>>>>> 7d4194869f51c9612dcc7b162fba6dcaceae7218

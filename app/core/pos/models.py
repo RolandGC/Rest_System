@@ -13,7 +13,14 @@ from config import settings
 from core.pos.choices import payment_condition, payment_method, voucher
 from core.user.models import User
 
+# CAMBIOS DE KOLYN, ANGEL, KOLYN
+class Mesa(models.Model):
+    
+    numero_mesa=models.IntegerField()
+    disponibilidad=models.BooleanField(default=True)
 
+    def __str__(self):
+        return f'Mesa N° {self.numero_mesa}'
 
 class Company(models.Model):
     name = models.CharField(max_length=50, verbose_name='Nombre')
@@ -99,6 +106,7 @@ class Product(models.Model):
         item['pvp'] = format(self.pvp, '.2f')
         item['sub_total'] = format(self.pvp * 1, '.2f')
         item['dsct'] = 0
+        item['cant'] = 1
         item['image'] = self.get_image()
         return item
     
@@ -163,6 +171,10 @@ class Sale(models.Model):
     card_number = models.CharField(max_length=30, null=True, blank=True)
     titular = models.CharField(max_length=30, null=True, blank=True)
     amount_debited = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
+    mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE, null=True, blank=True)
+    estado_entrega = models.BooleanField(default=False)
+    estado_pago = models.BooleanField(default=False)
+    
 
     def __str__(self):
         return f'{self.client.user.get_full_name()} / {self.nro()}'
@@ -183,7 +195,7 @@ class Sale(models.Model):
         return self.card_number
 
     def toJSON(self):
-        item = model_to_dict(self, exclude=[''])
+        item = model_to_dict(self, exclude=['mesa','estado_entrega','estado_pago'])
         item['nro'] = format(self.id, '06d')
         item['card_number'] = self.card_number_format()
         item['date_joined'] = self.date_joined.strftime('%Y-%m-%d')
@@ -202,6 +214,8 @@ class Sale(models.Model):
         item['cash'] = format(self.cash, '.2f')
         item['change'] = format(self.change, '.2f')
         item['amount_debited'] = format(self.amount_debited, '.2f')
+        # item['numero_mesa'] = self.numero_mesa.numero
+        # item['estado'] = self.estado_entrega
         return item
 
     def calculate_invoice(self):
@@ -336,14 +350,7 @@ class PaymentsCtaCollect(models.Model):
 
 
 
-# CAMBIOS DE KOLYN, ANGEL, KOLYN
-class Mesa(models.Model):
-    
-    numero_mesa=models.IntegerField()
-    disponibilidad=models.BooleanField(default=True)
 
-    def __str__(self):
-        return f'Mesa N° {self.numero_mesa}'
 
 # class Pedido
     # id

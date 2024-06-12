@@ -89,25 +89,29 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
         print(request.POST)
         action = request.POST['action']
         print(action)
-        print("admin ventas")
+        #print(request.POST["id_mesa"])
         data = {}
         try:
             if action == 'add':
                 with transaction.atomic():
                     sale = Sale()
+                    sale.mesa_id = int(request.POST['id_mesa'])
+                    #print("esta aqui")
                     sale.employee_id = request.user.id
                     sale.client_id = int(request.POST['client'])
+                    print("esta aqui cliente")
                     sale.payment_method = request.POST['payment_method']
                     sale.payment_condition = request.POST['payment_condition']
                     sale.type_voucher = request.POST['type_voucher']
                     sale.igv = float(Company.objects.first().igv) / 100
                     sale.dscto = float(request.POST['dscto']) / 100
                     sale.save()
-
+                    print(sale)
                     for i in json.loads(request.POST['products']):
                         prod = Product.objects.get(pk=i['id'])
                         saledetail = SaleDetail()
                         saledetail.sale_id = sale.id
+                        print(sale.id)
                         saledetail.product_id = prod.id
                         saledetail.price = float(i['pvp'])
                         saledetail.cant = int(i['cant'])

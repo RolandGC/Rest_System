@@ -1,4 +1,6 @@
+let numeroMesa=null
 document.addEventListener('DOMContentLoaded', function() {
+    
     
     // #selctores propios
     let contenedorMesas=document.querySelector('.contenedor-modal');
@@ -8,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
     contenedorMesas.addEventListener('click', (e) => {
         console.log(e.target)
         if (e.target.classList.contains('card-mesa')) {
+            const mesa = e.target
+            numeroMesa = mesa.getAttribute('data-mesaId')
+            console.log(numeroMesa)
             mostrarModal()
         }
     });
@@ -18,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     btnCloseModal.addEventListener('click', () => {
         modal.style.display = 'none';
+        window.location.reload()
     });
 
 });

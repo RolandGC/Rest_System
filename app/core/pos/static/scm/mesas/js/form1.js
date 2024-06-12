@@ -39,22 +39,22 @@ var vents = {
         $.each(this.details.products, function (i, item) {
             item.cant = parseInt(item.cant);
             item.subtotal = parseInt(item.cant) * parseFloat(item.pvp);
-            item.total_dscto = (parseFloat(item.dscto) / 100) * parseFloat(item.subtotal);
-            item.total = item.subtotal - item.total_dscto;
+            //item.total_dscto = (parseFloat(item.dscto) / 100) * parseFloat(item.subtotal);
+            item.total = item.subtotal;
             total += item.total;
         });
 
         vents.details.subtotal = total;
-        vents.details.dscto = parseFloat($('input[name="dscto"]').val());
-        vents.details.total_dscto = vents.details.subtotal * (vents.details.dscto / 100);
+        // vents.details.dscto = 0.00;
+        // vents.details.total_dscto = 0.00;
         vents.details.total_igv = vents.details.subtotal * (vents.details.igv / 100);
-        vents.details.total = vents.details.subtotal - vents.details.total_dscto;
+        vents.details.total = vents.details.subtotal;
         vents.details.total = parseFloat(vents.details.total.toFixed(2));
 
         $('input[name="subtotal"]').val(vents.details.subtotal.toFixed(2));
         $('input[name="igv"]').val(vents.details.igv.toFixed(2));
         $('input[name="total_igv"]').val(vents.details.total_igv.toFixed(2));
-        $('input[name="total_dscto"]').val(vents.details.total_dscto.toFixed(2));
+        //$('input[name="total_dscto"]').val(vents.details.total_dscto.toFixed(2));
         $('input[name="total"]').val(vents.details.total.toFixed(2));
         $('input[name="amount"]').val(vents.details.total.toFixed(2));
     },
@@ -77,8 +77,8 @@ var vents = {
                 {data: "pvp"},
                 {data: "pvp"},
                 {data: "sub_total"},
-                {data: "dsct"},
-                {data: "total_dscto"},
+                // {data: "dsct"},
+                // {data: "total_dscto"},
                 {data: "tot"},
             ],
             columnDefs: [
@@ -89,32 +89,26 @@ var vents = {
                         return `S/.${data}`;
                     }
                 },
+                
                 {
-                    targets: [3],
+                    targets: [3], 
                     class: 'text-center',
                     render: function (data, type, row) {
                         return '<input type="text" class="form-control input-sm" style="width: 80px;" autocomplete="off" name="cant" value="1">';
                     }
                 },
                 {
-                    targets: [7],
+                    targets: [5],
                     class: 'text-center',
                     render: function (data, type, row) {
                         return `S/.${row.pvp}`;
                     }
                 },
                 {
-                    targets: [1,2,4,6],
+                    targets: [1,2,4],
                     class: 'text-center',
                     render: function (data, type, row) {
                         return data;
-                    }
-                },
-                {
-                    targets: [5],
-                    class: 'text-center',
-                    render: function (data, type, row) {
-                        return '<input type="text" class="form-control input-sm" style="width: 80px;" autocomplete="off" name="dscto_unitary" value="' + String(row.dscto) + '">';
                     }
                 },
                 {
@@ -485,12 +479,14 @@ document.addEventListener('DOMContentLoaded', function (e) {
             parameters.append('titular', input_titular.val());
             parameters.append('dscto', $('input[name="dscto"]').val());
             parameters.append('amount_debited', input_amountdebited.val());
+            
             if (vents.details.products.length === 0) {
                 message_error('Debe tener al menos un item en el detalle de la venta');
                 $('.nav-tabs a[href="#menu1"]').tab('show');
                 return false;
             }
             parameters.append('products', JSON.stringify(vents.details.products));
+            parameters.append('id_mesa',numeroMesa)
             let urlrefresh = fvSale.form.getAttribute('data-url');
             submit_formdata_with_ajax('Notificación',
                 '¿Estas seguro de realizar la siguiente acción?',
@@ -586,7 +582,6 @@ $(function () {
 
     function renderResults(data) {
         $('.autocomplete-results').empty();
-    
         // Renderiza los nuevos resultados
         data.forEach(function(item) {
             var resultItem = $('<div class="autocomplete-result"></div>');
@@ -598,6 +593,7 @@ $(function () {
                 var product = $(this).data('product');
                 console.log('Producto seleccionado:', product);
                 vents.add_product(item);
+                console.log(item)
             });
         });
     }
@@ -614,33 +610,37 @@ $(function () {
             vents.details.products[tr.row].cant = parseInt($(this).val());
             vents.calculate_invoice();
             $('td:eq(4)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].subtotal.toFixed(2));
-            $('td:eq(7)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
+            $('td:eq(5)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
             console.log(vents.details)
+            //cambios
+            vents.calculate_invoice();
         })
         .on('change', 'input[name="cant"]', function () {
             var tr = tblProducts.cell($(this).closest('td, li')).index();
             vents.details.products[tr.row].cant = parseInt($(this).val());
             vents.calculate_invoice();
             $('td:eq(4)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].subtotal.toFixed(2));
-            $('td:eq(7)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
+            $('td:eq(5)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
             console.log(vents.details)
-        })
-        .on('change', 'input[name="dscto_unitary"]', function () {
-            var tr = tblProducts.cell($(this).closest('td, li')).index();
-            vents.details.products[tr.row].dscto = parseFloat($(this).val());
+            //cambios
             vents.calculate_invoice();
-            $('td:eq(6)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total_dscto.toFixed(2));
-            $('td:eq(7)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
-            console.log(vents.details)
         })
-        .on('input', 'input[name="dscto_unitary"]', function () {
-            var tr = tblProducts.cell($(this).closest('td, li')).index();
-            vents.details.products[tr.row].dscto = parseFloat($(this).val());
-            vents.calculate_invoice();
-            $('td:eq(6)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total_dscto.toFixed(2));
-            $('td:eq(7)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
-            console.log(vents.details)
-        })
+        // .on('change', 'input[name="dscto_unitary"]', function () {
+        //     var tr = tblProducts.cell($(this).closest('td, li')).index();
+        //     vents.details.products[tr.row].dscto = parseFloat($(this).val());
+        //     vents.calculate_invoice();
+        //     $('td:eq(6)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total_dscto.toFixed(2));
+        //     $('td:eq(7)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
+        //     console.log(vents.details)
+        // })
+        // .on('input', 'input[name="dscto_unitary"]', function () {
+        //     var tr = tblProducts.cell($(this).closest('td, li')).index();
+        //     vents.details.products[tr.row].dscto = parseFloat($(this).val());
+        //     vents.calculate_invoice();
+        //     $('td:eq(6)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total_dscto.toFixed(2));
+        //     $('td:eq(7)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
+        //     console.log(vents.details)
+        // })
         .on('click', 'a[rel="remove"]', function () {
             var tr = tblProducts.cell($(this).closest('td, li')).index();
             vents.details.products.splice(tr.row, 1);

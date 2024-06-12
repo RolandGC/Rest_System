@@ -8,39 +8,61 @@
     bottom: 0;
     z-index: 1;
 }
-.modal-contenedor{
+
+.modal-contenedor {
     display: flex;
     justify-content: center;
     /*align-items: center;*/
     height: 100vh;
 }
+
 #myModal .modal-content {
     background-color: white;
     max-width: 1300px;
-    width:98%;
+    width: 98%;
     padding: 20px;
     border-radius: 10px;
 }
-.mensaje1 div{
+
+.mensaje1 div {
     display: flex;
     gap: 20px;
 }
-.mensaje1 div p{
+
+.mensaje1 div p {
     max-width: 220px;
     word-wrap: break-word;
-    overflow-wrap: break-word; /* Propiedad adicional para evitar el desbordamiento horizontal */
+    overflow-wrap: break-word;
+    /* Propiedad adicional para evitar el desbordamiento horizontal */
 }
-.mensaje1 div *{
+
+.mensaje1 div * {
     margin: 5px 0;
 }
-.mensaje1, .mensaje2{
+
+.mensaje1,
+.mensaje2 {
     display: none;
 }
 
+
 /* Estilo de las vistas del calendario */
+
 .fc-view {
     border: 1px solid #0652DD;
     margin-bottom: 20px;
     border-radius: 10px;
-    
+}
+
+
+/* Style hover in search products */
+
+.hover-effect {
+    padding: 10px;
+    font-size: 16px;
+}
+
+.hover-effect:hover {
+    background-color: yellow;
+    color: red;
 }

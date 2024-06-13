@@ -1,20 +1,33 @@
+/* Background overlay for the modal */
+
 #myModal {
     display: none;
     background-color: rgba(22, 21, 21, 0.5);
-    position: absolute;
+    position: fixed;
+    /* Changed from absolute to fixed */
     top: 0;
     right: 0;
     left: 0;
     bottom: 0;
     z-index: 1;
+    overflow: auto;
+    /* Ensure the whole modal can scroll if needed */
 }
+
+
+/* Container to center the modal content */
 
 .modal-contenedor {
     display: flex;
     justify-content: center;
-    /*align-items: center;*/
-    height: 100vh;
+    align-items: center;
+    /* Center vertically */
+    min-height: 100vh;
+    /* Ensure it fills the viewport height */
 }
+
+
+/* Modal content area */
 
 #myModal .modal-content {
     background-color: white;
@@ -22,27 +35,10 @@
     width: 98%;
     padding: 20px;
     border-radius: 10px;
-}
-
-.mensaje1 div {
-    display: flex;
-    gap: 20px;
-}
-
-.mensaje1 div p {
-    max-width: 220px;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    /* Propiedad adicional para evitar el desbordamiento horizontal */
-}
-
-.mensaje1 div * {
-    margin: 5px 0;
-}
-
-.mensaje1,
-.mensaje2 {
-    display: none;
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    max-height: 90vh;
+    /* Prevent the modal from exceeding viewport height */
 }
 
 

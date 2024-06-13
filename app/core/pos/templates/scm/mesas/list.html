@@ -53,7 +53,7 @@
     </div>
     
 </div>
-<section id="myModal" class="modal">
+<section id="myModal" class="modal" style="overflow: scroll;">
     <div class="modal-contenedor" >
         <div class="modal-content">
             <div class="d-flex justify-content-end">
@@ -61,25 +61,15 @@
             </div>
             <!--pedido-->
             
-            <form id="frmSale" method="post" data-url="{% url 'sale_admin_list' %}" action="{% url 'sale_admin_create' %}">
+            <form id="frmSale" method="post" data-url="{% url 'sale_admin_list' %}" action="{% url 'sale_admin_create' %}" style="overflow: scroll;">
                 <div class="card {{ dshboard.card }}">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            {% if action == 'add' %}
-                                <i class="fas fa-plus"></i>
-                            {% else %}
-                                <i class="fas fa-edit"></i>
-                            {% endif %}
-                            {{ title }}
-                        </h3>
-                    </div>
                     <div class="card-body" style="display: block;">
                         <div class="container-fluid">
                             {% csrf_token %}
                             <input type="hidden" id="action" name="action" value="{{ action }}">
                             <div class="row">
                                 <div class="col-md-12 col-lg-8 card p-3 pb-0">
-                                    <h3 class="mb-0"><b><i class="fas fa-boxes"></i> Detalle de Venta</b></h3><br>
+                                    <h5 class="mb-0"><b><i class="fas fa-boxes"></i> Detalle de Venta</b></h5><br>
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group">
@@ -103,8 +93,9 @@
                                                                 Borrar todo</a>
                                                         </div>
                                                     </div>
-                                                    <div class="autocomplete-results position-relative border hover " style="z-index: 1; bottom:-10px; background-color: white;width: 100%;height:auto; transition: background-color 0.3s;">
-
+                                                    <div class="autocomplete-results position-absolute border" 
+                                                        style="z-index: 1050; top: 100%; left: 0; right: 0; background-color: white; width: 100%; max-height: 300px; overflow-y: auto;">
+                                                        <!-- Aquí irán los resultados de la búsqueda -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -131,7 +122,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-lg-4 card p-3">
-                                    <h3 class="mb-0 pb-0"><b><i class="fas fa-shopping-cart"></i> Factura</b></h3><br>
+                                    <h5 class="mb-0 pb-0"><b><i class="fas fa-shopping-cart"></i> Factura</b></h5><br>
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group">

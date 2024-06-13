@@ -1,4 +1,4 @@
-let url="/pos/crm/sale/admin/add/"
+let url = "/pos/crm/sale/admin/add/"
 var current_date;
 
 var fvSale;
@@ -34,9 +34,9 @@ var vents = {
         change: 0.00,
         products: [],
     },
-    calculate_invoice: function () {
+    calculate_invoice: function() {
         var total = 0.00;
-        $.each(this.details.products, function (i, item) {
+        $.each(this.details.products, function(i, item) {
             item.cant = parseInt(item.cant);
             item.subtotal = parseInt(item.cant) * parseFloat(item.pvp);
             //item.total_dscto = (parseFloat(item.dscto) / 100) * parseFloat(item.subtotal);
@@ -58,7 +58,7 @@ var vents = {
         $('input[name="total"]').val(vents.details.total.toFixed(2));
         $('input[name="amount"]').val(vents.details.total.toFixed(2));
     },
-    list_products: function () {
+    list_products: function() {
         this.calculate_invoice();
         tblProducts = $('#tblProducts').DataTable({
             //responsive: true,
@@ -72,54 +72,53 @@ var vents = {
             scrollX: true,
             scrollCollapse: true,
             columns: [
-                {data: "id"},
-                {data: "name"},
-                {data: "pvp"},
-                {data: "pvp"},
-                {data: "sub_total"},
+                { data: "id" },
+                { data: "name" },
+                { data: "pvp" },
+                { data: "pvp" },
+                { data: "sub_total" },
                 // {data: "dsct"},
                 // {data: "total_dscto"},
-                {data: "tot"},
+                { data: "tot" },
             ],
-            columnDefs: [
-                {
-                    targets: [2,4],
+            columnDefs: [{
+                    targets: [2, 4],
                     class: 'text-center',
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         return `S/.${data}`;
                     }
                 },
-                
+
                 {
-                    targets: [3], 
+                    targets: [3],
                     class: 'text-center',
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         return '<input type="text" class="form-control input-sm" style="width: 80px;" autocomplete="off" name="cant" value="1">';
                     }
                 },
                 {
                     targets: [5],
                     class: 'text-center',
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         return `S/.${row.pvp}`;
                     }
                 },
                 {
-                    targets: [1,2,4],
+                    targets: [1, 2, 4],
                     class: 'text-center',
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         return data;
                     }
                 },
                 {
                     targets: [0],
                     class: 'text-center',
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         return '<a rel="remove" class="btn btn-danger btn-flat btn-xs"><i class="fas fa-times"></i></a>';
                     }
                 },
             ],
-            rowCallback: function (row, data, index) {
+            rowCallback: function(row, data, index) {
                 var tr = $(row).closest('tr');
                 tr.find('input[name="cant"]')
                     .TouchSpin({
@@ -127,7 +126,7 @@ var vents = {
                         // max: stock,
                         verticalbuttons: true
                     })
-                    .keypress(function (e) {
+                    .keypress(function(e) {
                         return validate_form_text('numbers', e, null);
                     });
                 tr.find('input[name="dscto_unitary"]')
@@ -140,25 +139,25 @@ var vents = {
                         verticalbuttons: true,
                         maxboostedstep: 10,
                     })
-                    .keypress(function (e) {
+                    .keypress(function(e) {
                         return validate_decimals($(this), e);
                     });
             },
-            initComplete: function (settings, json) {
+            initComplete: function(settings, json) {
 
             },
         });
     },
-    get_products_ids: function () {
+    get_products_ids: function() {
         return this.details.products.map(value => value.id);
     },
-    add_product: function (item) {
+    add_product: function(item) {
         this.details.products.push(item);
         this.list_products();
     },
 };
 
-document.addEventListener('DOMContentLoaded', function (e) {
+document.addEventListener('DOMContentLoaded', function(e) {
     const frmClient = document.getElementById('frmClient');
     fvClient = FormValidation.formValidation(frmClient, {
             locale: 'es_ES',
@@ -199,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         digits: {},
                         remote: {
                             url: url,
-                            data: function () {
+                            data: function() {
                                 return {
                                     obj: frmClient.querySelector('[name="dni"]').value,
                                     type: 'dni',
@@ -223,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         digits: {},
                         remote: {
                             url: url,
-                            data: function () {
+                            data: function() {
                                 return {
                                     obj: frmClient.querySelector('[name="mobile"]').value,
                                     type: 'mobile',
@@ -238,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         }
                     }
                 },
-                
+
                 address: {
                     validators: {
                         stringLength: {
@@ -247,9 +246,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
                     }
                 },
             },
-        }
-    )
-        .on('core.element.validated', function (e) {
+        })
+        .on('core.element.validated', function(e) {
             if (e.valid) {
                 const groupEle = FormValidation.utils.closest(e.element, '.form-group');
                 if (groupEle) {
@@ -265,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
             const iconElement = iconPlugin && iconPlugin.icons.has(e.element) ? iconPlugin.icons.get(e.element) : null;
             iconElement && (iconElement.style.display = 'none');
         })
-        .on('core.validator.validated', function (e) {
+        .on('core.validator.validated', function(e) {
             if (!e.result.valid) {
                 const messages = [].slice.call(frmClient.querySelectorAll('[data-field="' + e.field + '"][data-validator]'));
                 messages.forEach((messageEle) => {
@@ -274,12 +272,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 });
             }
         })
-        .on('core.form.valid', function () {
+        .on('core.form.valid', function() {
             var parameters = new FormData(fvClient.form);
             parameters.append('action', 'create_client');
             submit_formdata_with_ajax('Notificación', '¿Estas seguro de realizar la siguiente acción?', url,
                 parameters,
-                function (request) {
+                function(request) {
                     var newOption = new Option(request.user.full_name + ' / ' + request.user.dni, request.id, false, true);
                     select_client.append(newOption).trigger('change');
                     fvSale.revalidateField('client');
@@ -289,28 +287,29 @@ document.addEventListener('DOMContentLoaded', function (e) {
         });
 });
 
-document.addEventListener('DOMContentLoaded', function (e) {
+document.addEventListener('DOMContentLoaded', function(e) {
     $('.rowInitial').hide();
+
     function validateChange() {
         var cash = parseFloat(input_cash.val())
         let initial = parseFloat(input_initial.val())
         var method_payment = select_paymentmethod.val();
         let payment_condition = select_paymentcondition.val();
         var total = parseFloat(vents.details.total);
-        if (payment_condition==='credito') {
+        if (payment_condition === 'credito') {
             if (initial < total) {
-                return {valid: false, message: 'El monto inicial debe ser mayor o igual al total a pagar'};
+                return { valid: false, message: 'El monto inicial debe ser mayor o igual al total a pagar' };
             }
         }
         if (method_payment === 'efectivo') {
             if (cash < total) {
-                return {valid: false, message: 'El efectivo debe ser mayor o igual al total a pagar'};
+                return { valid: false, message: 'El efectivo debe ser mayor o igual al total a pagar' };
             }
         } else if (method_payment === 'efectivo_tarjeta') {
             var amount_debited = (total - cash);
             input_amountdebited.val(amount_debited.toFixed(2));
         }
-        return {valid: true};
+        return { valid: true };
     }
 
     const frmSale = document.getElementById('frmSale');
@@ -362,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         },
                     }
                 },
-                initial:{
+                initial: {
                     validators: {
                         notEmpty: {
                             message: 'Ingresa un monto inicial'
@@ -432,16 +431,15 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         notEmpty: {},
                         callback: {
                             //message: 'El cambio no puede ser negativo',
-                            callback: function (input) {
+                            callback: function(input) {
                                 return validateChange();
                             }
                         }
                     }
                 },
             },
-        }
-    )
-        .on('core.element.validated', function (e) {
+        })
+        .on('core.element.validated', function(e) {
             if (e.valid) {
                 const groupEle = FormValidation.utils.closest(e.element, '.form-group');
                 if (groupEle) {
@@ -457,7 +455,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
             const iconElement = iconPlugin && iconPlugin.icons.has(e.element) ? iconPlugin.icons.get(e.element) : null;
             iconElement && (iconElement.style.display = 'none');
         })
-        .on('core.validator.validated', function (e) {
+        .on('core.validator.validated', function(e) {
             if (!e.result.valid) {
                 const messages = [].slice.call(frmSale.querySelectorAll('[data-field="' + e.field + '"][data-validator]'));
                 messages.forEach((messageEle) => {
@@ -466,12 +464,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 });
             }
         })
-        .on('core.form.valid', function () {
+        .on('core.form.valid', function() {
             var parameters = new FormData($(fvSale.form)[0]);
             parameters.append('action', $('input[name="action"]').val());
             parameters.append('payment_method', select_paymentmethod.val());
             parameters.append('payment_condition', select_paymentcondition.val());
-            parameters.append('initial',input_initial.val())
+            parameters.append('initial', input_initial.val())
             parameters.append('end_credit', input_endcredit.val());
             parameters.append('cash', input_cash.val());
             parameters.append('change', input_change.val());
@@ -479,24 +477,24 @@ document.addEventListener('DOMContentLoaded', function (e) {
             parameters.append('titular', input_titular.val());
             parameters.append('dscto', $('input[name="dscto"]').val());
             parameters.append('amount_debited', input_amountdebited.val());
-            
+
             if (vents.details.products.length === 0) {
                 message_error('Debe tener al menos un item en el detalle de la venta');
                 $('.nav-tabs a[href="#menu1"]').tab('show');
                 return false;
             }
             parameters.append('products', JSON.stringify(vents.details.products));
-            parameters.append('id_mesa',numeroMesa)
+            parameters.append('id_mesa', numeroMesa)
             let urlrefresh = fvSale.form.getAttribute('data-url');
             submit_formdata_with_ajax('Notificación',
                 '¿Estas seguro de realizar la siguiente acción?',
                 url,
                 parameters,
-                function (request) {
-                    dialog_action('Notificación', '¿Desea Imprimir el Comprobante?', function () {
+                function(request) {
+                    dialog_action('Notificación', '¿Desea Imprimir el Comprobante?', function() {
                         window.open('/pos/crm/sale/print/voucher/' + request.id + '/', '_blank');
                         location.href = urlrefresh;
-                    }, function () {
+                    }, function() {
                         location.href = urlrefresh;
                     });
                 },
@@ -506,13 +504,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
 function printInvoice(id) {
     var printWindow = window.open("/pos/crm/sale/print/voucher/" + id + "/", 'Print', 'left=200, top=200, width=950, height=500, toolbar=0, resizable=0');
-    printWindow.addEventListener('load', function () {
+    printWindow.addEventListener('load', function() {
         printWindow.print();
     }, true);
 }
 
 function hideRowsVents(values) {
-    $.each(values, function (key, value) {
+    $.each(values, function(key, value) {
         if (value.enable) {
             $(inputs_vents[value.pos]).show();
         } else {
@@ -521,7 +519,7 @@ function hideRowsVents(values) {
     });
 }
 
-$(function () {
+$(function() {
 
     current_date = new moment().format("YYYY-MM-DD");
     input_searchproducts = $('input[name="searchproducts"]');
@@ -546,7 +544,7 @@ $(function () {
     /* Product */
 
     input_searchproducts.autocomplete({
-        source: function (request, response) {
+        source: function(request, response) {
             $.ajax({
                 //url: "/pos/crm/sale/admin/add/",
                 url: url,
@@ -560,10 +558,10 @@ $(function () {
                 headers: {
                     'X-CSRFToken': csrftoken
                 },
-                beforeSend: function () {
+                beforeSend: function() {
 
                 },
-                success: function (data) {
+                success: function(data) {
                     console.log(data)
                     renderResults(data)
                 }
@@ -571,7 +569,7 @@ $(function () {
         },
         min_length: 3,
         delay: 300,
-        select: function (event, ui) {
+        select: function(event, ui) {
             event.preventDefault();
             $(this).blur();
             ui.item.cant = 1;
@@ -581,48 +579,90 @@ $(function () {
     });
 
     function renderResults(data) {
-        $('.autocomplete-results').empty();
+        var resultsContainer = $('.autocomplete-results');
+        resultsContainer.empty();
+
+        if (data.length === 0) {
+            resultsContainer.hide(); // Ocultar si no hay resultados
+            return;
+        }
+
+        // Mostrar el contenedor si hay resultados
+        resultsContainer.show();
+
         // Renderiza los nuevos resultados
         data.forEach(function(item) {
             var resultItem = $('<div class="autocomplete-result"></div>');
             resultItem.text(item.name);
             resultItem.data('product', item);
-            resultItem.appendTo('.autocomplete-results');
-    
+            resultItem.appendTo(resultsContainer);
+
             resultItem.on('click', function() {
                 var product = $(this).data('product');
                 console.log('Producto seleccionado:', product);
                 vents.add_product(item);
-                console.log(item)
+                resultsContainer.hide(); // Ocultar cuando se selecciona un resultado
             });
+
+            // Estilos CSS para el efecto hover
+            resultItem.hover(
+
+                function() {
+                    $(this).css({
+                        'background-color': '#0879FB', // Cambiar fondo a azul
+                        'color': 'white' // Cambiar texto a blanco
+                    });
+                },
+                function() {
+                    $(this).css({
+                        'background-color': '',
+                        'color': ''
+                    });
+                }
+            );
         });
     }
 
 
-    $('.btnClearProducts').on('click', function () {
+    input_searchproducts.on('input', function(e) {
+        var resultsContainer = $('.autocomplete-results');
+        if (e.target.value == '') {
+            resultsContainer.hide(); // Ocultar si no hay resultados
+            //return;
+        }
+    });
+
+    // Mostrar resultados si el input recupera el foco y hay resultados
+    input_searchproducts.on('focus', function() {
+        if ($('.autocomplete-results').children().length > 0) {
+            $('.autocomplete-results').show();
+        }
+    });
+
+    $('.btnClearProducts').on('click', function() {
         input_searchproducts.val('').focus();
     });
 
     $('#tblProducts tbody')
         .off()
-        .on('input', 'input[name="cant"]', function () {
+        .on('input', 'input[name="cant"]', function() {
             var tr = tblProducts.cell($(this).closest('td, li')).index();
             vents.details.products[tr.row].cant = parseInt($(this).val());
             vents.calculate_invoice();
             $('td:eq(4)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].subtotal.toFixed(2));
             $('td:eq(5)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
             console.log(vents.details)
-            //cambios
+                //cambios
             vents.calculate_invoice();
         })
-        .on('change', 'input[name="cant"]', function () {
+        .on('change', 'input[name="cant"]', function() {
             var tr = tblProducts.cell($(this).closest('td, li')).index();
             vents.details.products[tr.row].cant = parseInt($(this).val());
             vents.calculate_invoice();
             $('td:eq(4)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].subtotal.toFixed(2));
             $('td:eq(5)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
             console.log(vents.details)
-            //cambios
+                //cambios
             vents.calculate_invoice();
         })
         // .on('change', 'input[name="dscto_unitary"]', function () {
@@ -641,13 +681,13 @@ $(function () {
         //     $('td:eq(7)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
         //     console.log(vents.details)
         // })
-        .on('click', 'a[rel="remove"]', function () {
+        .on('click', 'a[rel="remove"]', function() {
             var tr = tblProducts.cell($(this).closest('td, li')).index();
             vents.details.products.splice(tr.row, 1);
             tblProducts.row(tr.row).remove().draw();
         });
 
-    $('.btnSearchProducts').on('click', function () {
+    $('.btnSearchProducts').on('click', function() {
         tblSearchProducts = $('#tblSearchProducts').DataTable({
             // responsive: true,
             // autoWidth: false,
@@ -668,28 +708,27 @@ $(function () {
             scrollX: true,
             scrollCollapse: true,
             columns: [
-                {data: "name"},
-                {data: "category.name"},
-                {data: "pvp"},
-                {data: "id"},
+                { data: "name" },
+                { data: "category.name" },
+                { data: "pvp" },
+                { data: "id" },
             ],
-            columnDefs: [
-                {
+            columnDefs: [{
                     targets: [-2],
                     class: 'text-center',
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         return 'S/.' + parseFloat(row.pvp).toFixed(2);
                     }
                 },
                 {
                     targets: [-1],
                     class: 'text-center',
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         return '<a rel="add" class="btn btn-success btn-flat btn-xs"><i class="fas fa-plus"></i></a>';
                     }
                 }
             ],
-            rowCallback: function (row, data, index) {
+            rowCallback: function(row, data, index) {
 
             },
         });
@@ -698,16 +737,16 @@ $(function () {
 
     $('#tblSearchProducts tbody')
         .off()
-        .on('click', 'a[rel="add"]', function () {
+        .on('click', 'a[rel="add"]', function() {
             var row = tblSearchProducts.row($(this).parents('tr')).data();
             row.cant = 1;
             vents.add_product(row);
             tblSearchProducts.row($(this).parents('tr')).remove().draw();
         });
 
-    $('.btnRemoveAllProducts').on('click', function () {
+    $('.btnRemoveAllProducts').on('click', function() {
         if (vents.details.products.length === 0) return false;
-        dialog_action('Notificación', '¿Estas seguro de eliminar todos los items de tu detalle?', function () {
+        dialog_action('Notificación', '¿Estas seguro de eliminar todos los items de tu detalle?', function() {
             vents.details.products = [];
             vents.list_products();
         });
@@ -716,54 +755,54 @@ $(function () {
     /* Client */
 
     select_client.select2({
-        theme: "bootstrap4",
-        language: 'es',
-        allowClear: true,
-        // dropdownParent: modal_sale,
-        ajax: {
-            delay: 250,
-            type: 'POST',
-            headers: {
-                'X-CSRFToken': csrftoken
+            theme: "bootstrap4",
+            language: 'es',
+            allowClear: true,
+            // dropdownParent: modal_sale,
+            ajax: {
+                delay: 250,
+                type: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                url: url,
+                data: function(params) {
+                    var queryParameters = {
+                        term: params.term,
+                        action: 'search_client'
+                    }
+                    return queryParameters;
+                },
+                processResults: function(data) {
+                    return {
+                        results: data
+                    };
+                },
             },
-            url: url,
-            data: function (params) {
-                var queryParameters = {
-                    term: params.term,
-                    action: 'search_client'
-                }
-                return queryParameters;
-            },
-            processResults: function (data) {
-                return {
-                    results: data
-                };
-            },
-        },
-        placeholder: 'Ingrese una descripción',
-        minimumInputLength: 1,
-    })
-        .on('select2:select', function (e) {
+            placeholder: 'Ingrese una descripción',
+            minimumInputLength: 1,
+        })
+        .on('select2:select', function(e) {
             fvSale.revalidateField('client');
         })
-        .on('select2:clear', function (e) {
+        .on('select2:clear', function(e) {
             fvSale.revalidateField('client');
         });
 
-    $('.btnAddClient').on('click', function () {
+    $('.btnAddClient').on('click', function() {
         input_birthdate.datetimepicker('date', new Date());
         $('#myModalClient').modal('show');
     });
 
-    $('#myModalClient').on('hidden.bs.modal', function () {
+    $('#myModalClient').on('hidden.bs.modal', function() {
         fvClient.resetForm(true);
     });
 
-    $('input[name="dni"]').keypress(function (e) {
+    $('input[name="dni"]').keypress(function(e) {
         return validate_form_text('numbers', e, null);
     });
 
-    $('input[name="mobile"]').keypress(function (e) {
+    $('input[name="mobile"]').keypress(function(e) {
         return validate_form_text('numbers', e, null);
     });
 
@@ -775,15 +814,15 @@ $(function () {
         maxDate: current_date
     });
 
-    input_birthdate.on('change.datetimepicker', function (e) {
+    input_birthdate.on('change.datetimepicker', function(e) {
         fvClient.revalidateField('birthdate');
     });
 
 
     select_paymentcondition
-        .on('change', function () {
+        .on('change', function() {
             var id = $(this).val();
-            hideRowsVents([{'pos': 0, 'enable': false}, {'pos': 1, 'enable': false}, {'pos': 2, 'enable': false}]);
+            hideRowsVents([{ 'pos': 0, 'enable': false }, { 'pos': 1, 'enable': false }, { 'pos': 2, 'enable': false }]);
             fvSale.disableValidator('card_number');
             fvSale.disableValidator('titular');
             fvSale.disableValidator('amount_debited');
@@ -792,25 +831,25 @@ $(function () {
             switch (id) {
                 case "contado":
                     fvSale.disableValidator('end_credit');
-                    
+
                     select_paymentmethod.prop('disabled', false).val('efectivo').trigger('change');
                     input_initial.prop('disabled', true)
                     $('.rowInitial').hide(); // Oculta la fila 'Inicial'
                     break;
                 case "credito":
                     fvSale.enableValidator('end_credit');
-                    hideRowsVents([{'pos': 2, 'enable': true}]);
+                    hideRowsVents([{ 'pos': 2, 'enable': true }]);
                     select_paymentmethod.prop('disabled', true);
-                    $('.rowInitial').show(); 
+                    $('.rowInitial').show();
                     input_initial.prop('disabled', false)
 
                     break;
             }
         });
 
-    select_paymentmethod.on('change', function () {
+    select_paymentmethod.on('change', function() {
         var id = $(this).val();
-        hideRowsVents([{'pos': 0, 'enable': false}, {'pos': 1, 'enable': false}, {'pos': 2, 'enable': false}]);
+        hideRowsVents([{ 'pos': 0, 'enable': false }, { 'pos': 1, 'enable': false }, { 'pos': 2, 'enable': false }]);
         input_cash.val(input_cash.val());
         input_amountdebited.val('0.00');
         switch (id) {
@@ -819,8 +858,8 @@ $(function () {
                 fvSale.disableValidator('card_number');
                 fvSale.disableValidator('titular');
                 fvSale.disableValidator('amount_debited');
-                input_cash.trigger("touchspin.updatesettings", {max: 100000000});
-                hideRowsVents([{'pos': 0, 'enable': true}]);
+                input_cash.trigger("touchspin.updatesettings", { max: 100000000 });
+                hideRowsVents([{ 'pos': 0, 'enable': true }]);
                 break;
             case "tarjeta_debito_credito":
                 fvSale.disableValidator('change');
@@ -829,7 +868,7 @@ $(function () {
                 fvSale.enableValidator('amount_debited');
                 input_amountdebited.val(vents.details.total.toFixed(2));
                 input_titular.val('');
-                hideRowsVents([{'pos': 1, 'enable': true}]);
+                hideRowsVents([{ 'pos': 1, 'enable': true }]);
                 break;
             case "efectivo_tarjeta":
                 input_change.val('0.00');
@@ -837,8 +876,8 @@ $(function () {
                 fvSale.enableValidator('card_number');
                 fvSale.enableValidator('titular');
                 fvSale.enableValidator('amount_debited');
-                input_cash.trigger("touchspin.updatesettings", {max: vents.details.total});
-                hideRowsVents([{'pos': 0, 'enable': true}, {'pos': 1, 'enable': true}]);
+                input_cash.trigger("touchspin.updatesettings", { max: vents.details.total });
+                hideRowsVents([{ 'pos': 0, 'enable': true }, { 'pos': 1, 'enable': true }]);
                 break;
         }
     });
@@ -853,35 +892,35 @@ $(function () {
             verticalbuttons: true,
             maxboostedstep: 10,
         })
-        .off('change').on('change touchspin.on.min touchspin.on.max', function () {
-        var paymentmethod = select_paymentmethod.val();
-        fvSale.revalidateField('cash');
-        var total = parseFloat(vents.details.total);
-        switch (paymentmethod) {
-            case "efectivo_tarjeta":
-                fvSale.revalidateField('amount_debited');
-                fvSale.revalidateField('change');
-                //input_change.val('0.00');
-                break;
-            case "efectivo":
-                var cash = parseFloat($(this).val());
-                var change = cash - total;
-                input_change.val(change.toFixed(2));
-                fvSale.revalidateField('change');
-                break;
-        }
-        return false;
-    })
-        .keypress(function (e) {
+        .off('change').on('change touchspin.on.min touchspin.on.max', function() {
+            var paymentmethod = select_paymentmethod.val();
+            fvSale.revalidateField('cash');
+            var total = parseFloat(vents.details.total);
+            switch (paymentmethod) {
+                case "efectivo_tarjeta":
+                    fvSale.revalidateField('amount_debited');
+                    fvSale.revalidateField('change');
+                    //input_change.val('0.00');
+                    break;
+                case "efectivo":
+                    var cash = parseFloat($(this).val());
+                    var change = cash - total;
+                    input_change.val(change.toFixed(2));
+                    fvSale.revalidateField('change');
+                    break;
+            }
+            return false;
+        })
+        .keypress(function(e) {
             return validate_decimals($(this), e);
         });
 
     input_cardnumber
-        .on('keypress', function (e) {
+        .on('keypress', function(e) {
             fvSale.revalidateField('card_number');
             return validate_form_text('numbers_spaceless', e, null);
         })
-        .on('keyup', function (e) {
+        .on('keyup', function(e) {
             var number = $(this).val();
             var number_nospaces = number.replace(/ /g, "");
             if (number_nospaces.length % 4 === 0 && number_nospaces.length > 0 && number_nospaces.length < 16) {
@@ -890,7 +929,7 @@ $(function () {
             $(this).val(number);
         });
 
-    input_titular.on('keypress', function (e) {
+    input_titular.on('keypress', function(e) {
         return validate_form_text('letters', e, null);
     });
 
@@ -904,7 +943,7 @@ $(function () {
 
     input_endcredit.datetimepicker('date', input_endcredit.val());
 
-    input_endcredit.on('change.datetimepicker', function (e) {
+    input_endcredit.on('change.datetimepicker', function(e) {
         fvSale.revalidateField('end_credit');
     });
 
@@ -918,18 +957,18 @@ $(function () {
             verticalbuttons: true,
             maxboostedstep: 10,
         })
-        .on('change touchspin.on.min touchspin.on.max', function () {
+        .on('change touchspin.on.min touchspin.on.max', function() {
             var dscto = $(this).val();
             if (dscto === '') {
                 $(this).val('0.00');
             }
             vents.calculate_invoice();
         })
-        .keypress(function (e) {
+        .keypress(function(e) {
             return validate_decimals($(this), e);
         });
 
-    $('.btnProforma').on('click', function () {
+    $('.btnProforma').on('click', function() {
         if (vents.details.products.length === 0) {
             message_error('Debe tener al menos un item en el detalle para poder crear una proforma');
             return false;
@@ -950,14 +989,14 @@ $(function () {
             xhrFields: {
                 responseType: 'blob'
             },
-            success: function (request) {
+            success: function(request) {
                 if (!request.hasOwnProperty('error')) {
                     var d = new Date();
                     var date_now = d.getFullYear() + "_" + d.getMonth() + "_" + d.getDay();
                     var a = document.createElement("a");
                     document.body.appendChild(a);
                     a.style = "display: none";
-                    const blob = new Blob([request], {type: 'application/pdf'});
+                    const blob = new Blob([request], { type: 'application/pdf' });
                     const url = URL.createObjectURL(blob);
                     a.href = url;
                     a.download = "download_pdf_" + date_now + ".pdf";
@@ -967,13 +1006,13 @@ $(function () {
                 }
                 message_error(request.error);
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error: function(jqXHR, textStatus, errorThrown) {
                 message_error(errorThrown + ' ' + textStatus);
             }
         });
     });
 
-    hideRowsVents([{'pos': 0, 'enable': true}, {'pos': 1, 'enable': false}, {'pos': 2, 'enable': false}]);
+    hideRowsVents([{ 'pos': 0, 'enable': true }, { 'pos': 1, 'enable': false }, { 'pos': 2, 'enable': false }]);
 
     $('i[data-field="client"]').hide();
     $('i[data-field="searchproducts"]').hide();

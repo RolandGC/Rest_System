@@ -95,8 +95,11 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
             if action == 'add':
                 with transaction.atomic():
                     sale = Sale()
-                    sale.mesa_id = int(request.POST['id_mesa'])
-                    #print("esta aqui")
+                    if request.POST['id_mesa'] != 'xd':
+                        mesa=Mesa.objects.get(pk=int(request.POST['id_mesa']))
+                        mesa.disponibilidad=False
+                        mesa.save()
+                        sale.mesa_id = int(request.POST['id_mesa'])
                     sale.employee_id = request.user.id
                     sale.client_id = int(request.POST['client'])
                     print("esta aqui cliente")

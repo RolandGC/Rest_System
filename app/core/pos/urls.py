@@ -29,6 +29,8 @@ urlpatterns = [
     path('scm/mesa/add/', MesasCreateView.as_view(), name='mesa_create'),
     path('scm/mesa/update/<int:pk>/', MesasUpdateView.as_view(), name='mesa_update'),
     path('scm/mesa/delete/<int:pk>/', MesasDeleteView.as_view(), name='mesa_delete'),
+    path('scm/orders/', OrdersListView.as_view(), name='orders_list'),
+    path('scm/orders/updatestate/', CambiarEstadoEntregado.as_view(), name='updatestate'),
     # ctascollect
     path('frm/ctas/collect/', CtasCollectListView.as_view(), name='ctascollect_list'),
     path('frm/ctas/collect/add/', CtasCollectCreateView.as_view(), name='ctascollect_create'),

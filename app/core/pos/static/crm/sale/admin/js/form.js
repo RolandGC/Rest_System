@@ -490,6 +490,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 return false;
             }
             parameters.append('products', JSON.stringify(vents.details.products));
+            parameters.append('id_mesa',"xd")
             let urlrefresh = fvSale.form.getAttribute('data-url');
             submit_formdata_with_ajax('Notificación',
                 '¿Estas seguro de realizar la siguiente acción?',

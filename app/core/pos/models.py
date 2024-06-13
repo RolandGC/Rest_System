@@ -214,8 +214,10 @@ class Sale(models.Model):
         item['cash'] = format(self.cash, '.2f')
         item['change'] = format(self.change, '.2f')
         item['amount_debited'] = format(self.amount_debited, '.2f')
-        # item['numero_mesa'] = self.numero_mesa.numero
-        # item['estado'] = self.estado_entrega
+        item['mesa_id'] = self.mesa.id if self.mesa is not None else 'N/A'
+        item['mesa_numero'] = self.mesa.numero_mesa if self.mesa is not None else 'N/A'
+        item['estado_entrega'] = self.estado_entrega
+        item['estado_pago'] = self.estado_pago
         return item
 
     def calculate_invoice(self):
@@ -349,25 +351,6 @@ class PaymentsCtaCollect(models.Model):
 
 
 
-
-
-
-# class Pedido
-    # id
-    # total
-    # tipo_pedido
-
-    
-# pedido_mesa
-    # id
-    # id_producto
-    # id mesa
-
-
-# class Mesa
-    # id
-    # numero_mesa
-    # disponibilidad (True or False)
 
 
 

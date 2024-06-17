@@ -241,27 +241,6 @@ for p in Permission.objects.filter(content_type__model=CtasCollect._meta.label.s
 print('insertado {}'.format(module.name))
 
 
-type = ModuleType()
-type.name = 'Asesoria'
-# type.name = 'Facturación'
-type.icon = 'fas fa-calculator'
-type.save()
-print('insertado {}'.format(type.name))
-
-module = Module()
-module.moduletype_id = 4
-module.name = 'Acta de levantamiento'
-module.url = '/aaaaa/'
-module.is_active = True
-module.is_vertical = True
-module.is_visible = True
-module.icon = 'fas fa-user-friends'
-module.description = 'Permite añadir un acta'
-module.save()
-for p in Permission.objects.filter(content_type__model=Client._meta.label.split('.')[1].lower()):
-    module.permits.add(p)
-print('insertado {}'.format(module.name))
-
 module = Module()
 module.name = 'Ventas'
 module.url = '/pos/crm/sale/client/'
@@ -281,7 +260,7 @@ type.save()
 print('insertado {}'.format(type.name))
 
 module = Module()
-module.moduletype_id = 5
+module.moduletype_id = 4
 module.name = 'Ventas'
 module.url = '/reports/sale/'
 module.is_active = True
@@ -294,7 +273,7 @@ print('insertado {}'.format(module.name))
 
 
 module = Module()
-module.moduletype_id = 5
+module.moduletype_id = 4
 module.name = 'Cuentas por Cobrar'
 module.url = '/reports/ctas/collect/'
 module.is_active = True

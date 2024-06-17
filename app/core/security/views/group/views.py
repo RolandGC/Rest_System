@@ -162,6 +162,7 @@ class GroupUpdateView(PermissionMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         action = request.POST['action']
+        print(request.POST)
         data = {}
         try:
             if action == 'edit':

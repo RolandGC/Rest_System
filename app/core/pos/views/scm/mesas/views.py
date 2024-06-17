@@ -1,7 +1,7 @@
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView, View
 from core.reports.forms import ReportForm
 from core.pos.forms import SaleForm
-#from core.security.mixins import PermissionMixin
+from core.security.mixins import PermissionMixin
 from core.pos.forms import Mesa, MesaForm
 from core.pos.forms import *
 from django.urls import reverse_lazy
@@ -15,14 +15,14 @@ from django.db import transaction
 from weasyprint import HTML, CSS
 import json
 
-class MesasListView(ListView,FormView):
+class MesasListView(PermissionMixin,ListView,FormView):
     #LISTAR MESAS
     model = Mesa
     form_class = SaleForm
     template_name = 'scm/mesas/list.html'
     context_object_name = "mesas"
     ordering = ['numero_mesa']
-    #permission_required = 'view_mesas'
+    permission_required = 'view_mesa'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -64,12 +64,12 @@ class MesasListView(ListView,FormView):
         return HttpResponse(json.dumps(data), content_type='application/json')
 
 
-class MesasCreateView(CreateView):
+class MesasCreateView(PermissionMixin,CreateView):
     model = Mesa
     template_name = 'scm/mesas/create.html'
     form_class = MesaForm
     success_url = reverse_lazy('mesa_list')
-    #permission_required = 'add_mesas'
+    permission_required = 'add_mesa'
 
     def validate_data(self):
         data = {'valid': True}
@@ -104,12 +104,12 @@ class MesasCreateView(CreateView):
         context['action'] = 'add'
         return context
     
-class MesasUpdateView(UpdateView):
+class MesasUpdateView(PermissionMixin,UpdateView):
     model = Mesa
     template_name = 'scm/mesas/create.html'
     form_class = MesaForm
     success_url = reverse_lazy('mesa_list')
-    #permission_required = 'change_mesas'
+    permission_required = 'change_mesa'
 
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -156,12 +156,12 @@ class MesasUpdateView(UpdateView):
         context['action'] = 'edit'
         return context
     
-class MesasDeleteView(DeleteView):
+class MesasDeleteView(PermissionMixin,DeleteView):
     model = Mesa
     template_name = 'scm/mesas/delete.html'
     success_url = reverse_lazy('mesa_list')
     context_object_name = "mesas"
-    #permission_required = 'delete_mesas'
+    permission_required = 'delete_mesa'
 
     def post(self, request, *args, **kwargs):
         data = {}
@@ -189,9 +189,9 @@ class MesasDeleteView(DeleteView):
         context['list_url'] = self.success_url
         return context
 
-class OrdersListView(FormView):
+class OrdersListView(PermissionMixin,FormView):
     template_name = 'scm/mesas/orders.html'
-    # permission_required = 'view_sale'
+    permission_required = 'view_sale'
     form_class = ReportForm
 
     def post(self, request, *args, **kwargs):
@@ -229,7 +229,8 @@ class OrdersListView(FormView):
     
 #cambiar estado entregado y cancelado    
         
-class CambiarEstado(View):
+class CambiarEstado(PermissionMixin,View):
+    permission_required = 'view_sale'
     def post(self, request):
         data = json.loads(request.body.decode('utf-8'))
         print(data)

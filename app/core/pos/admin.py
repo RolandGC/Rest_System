@@ -5,3 +5,4 @@ from core.pos.models import *
 admin.site.register(Sale)
 admin.site.register(SaleDetail)
 admin.site.register(Mesa)
+admin.site.register(Product)

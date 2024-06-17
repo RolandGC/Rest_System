@@ -14,13 +14,13 @@ dashboard.sidebar = 'sidebar-light-primary'
 dashboard.save()
 
 company = Company()
-company.name = 'CONAFORD'
+company.name = 'RESTAURANTE'
 company.ruc = '000000000000001'
-company.email = 'conaford@gmail.com'
+company.email = 'restaurante@gmail.com'
 company.phone = '0000001'
 company.mobile = '123456789'
-company.desc = 'Consultora y asesoria'
-company.website = 'conaford.com'
+company.desc = 'Venta de comida marina'
+company.website = 'restauranteXD.com'
 company.address = 'Jr. Ucayali SN'
 company.igv = 18.00
 company.save()
@@ -128,8 +128,8 @@ for p in Permission.objects.filter(content_type__model=User._meta.label.split('.
 print('insertado {}'.format(module.name))
 
 type = ModuleType()
-type.name = 'Consultoría'
-type.icon = 'fas fa-boxes'
+type.name = 'Restaurante'
+type.icon = 'fas fa-utensils'#working
 type.save()
 print('insertado {}'.format(type.name))
 
@@ -140,7 +140,7 @@ module.url = '/pos/scm/category/'
 module.is_active = True
 module.is_vertical = True
 module.is_visible = True
-module.icon = 'fas fa-truck-loading'
+module.icon = 'fas fa-table'#working
 module.description = 'Permite administrar las categorías de los productos'
 module.save()
 for p in Permission.objects.filter(content_type__model=Category._meta.label.split('.')[1].lower()):
@@ -154,10 +154,40 @@ module.url = '/pos/scm/product/'
 module.is_active = True
 module.is_vertical = True
 module.is_visible = True
-module.icon = 'fas fa-box'
+module.icon = "fas fa-drumstick-bite"
 module.description = 'Permite administrar los productos del sistema'
 module.save()
 for p in Permission.objects.filter(content_type__model=Product._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+
+module = Module()
+module.moduletype_id = 2
+module.name = 'Mesas'
+module.url = '/pos/scm/mesa/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-concierge-bell'#working
+module.description = 'Permite administrar las mesas del restaurante y hacer pedidos en el local'
+module.save()
+for p in Permission.objects.filter(content_type__model=Mesa._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+
+module = Module()
+module.moduletype_id = 2
+module.name = 'Órdenes'
+module.url = '/pos/scm/orders/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-clipboard'#working
+module.description = 'Permite administrar los pedidos hechos desde las mesas'
+module.save()
+for p in Permission.objects.filter(content_type__model=Sale._meta.label.split('.')[1].lower()):
     module.permits.add(p)
 print('insertado {}'.format(module.name))
 

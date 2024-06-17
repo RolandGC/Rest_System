@@ -37,10 +37,12 @@ class ProductForm(ModelForm):
         model = Product
         fields = '__all__'
         widgets = {
-            'name': forms.TextInput(attrs={'placeholder': 'Ingrese un nombre'}),
+            'name': forms.TextInput(attrs={'class':'form-control','placeholder': 'Ingrese un nombre'}),
             'category': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
             'price': forms.TextInput(),
             'pvp': forms.TextInput(),
+            'stock': forms.TextInput(attrs={'class':'form-control','type':'number', 'placeholder':'Ingrese la cantidad'}),
+            'image': forms.FileInput(attrs={'class':'form-control','type':'file'})
         }
 
 

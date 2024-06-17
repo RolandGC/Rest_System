@@ -29,7 +29,7 @@ class SaleAdminListView(PermissionMixin, FormView):
                 data = []
                 start_date = request.POST['start_date']
                 end_date = request.POST['end_date']
-                search = Sale.objects.filter()
+                search = Sale.objects.filter(estado_pago=True)  # Filtrar por estado_pago = True
                 if len(start_date) and len(end_date):
                     search = search.filter(date_joined__range=[start_date, end_date])
                 for i in search:
@@ -49,6 +49,7 @@ class SaleAdminListView(PermissionMixin, FormView):
         context['create_url'] = reverse_lazy('sale_admin_create')
         context['title'] = 'Listado de Ventas'
         return context
+
 
 #@method_decorator(csrf_exempt, name='dispatch')
 class SaleAdminCreateView(PermissionMixin, CreateView):
@@ -89,7 +90,6 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
         print(request.POST)
         action = request.POST['action']
         print(action)
-        #print(request.POST["id_mesa"])
         data = {}
         try:
             if action == 'add':
@@ -100,6 +100,9 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
                         mesa.disponibilidad=False
                         mesa.save()
                         sale.mesa_id = int(request.POST['id_mesa'])
+                    else:
+                        sale.estado_entrega = True
+                        sale.estado_pago = True
                     sale.employee_id = request.user.id
                     sale.client_id = int(request.POST['client'])
                     print("esta aqui cliente")
@@ -112,6 +115,10 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
                     print(sale)
                     for i in json.loads(request.POST['products']):
                         prod = Product.objects.get(pk=i['id'])
+                        print(prod.category.inventoried)
+                        if prod.category.inventoried:
+                            prod.stock -= int(i['cant'])
+                            prod.save()
                         saledetail = SaleDetail()
                         saledetail.sale_id = sale.id
                         print(sale.id)
@@ -161,8 +168,8 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
                 ids = json.loads(request.POST['ids'])
                 data = []
                 term = request.POST['term']
-                search = Product.objects.filter(Q(category__inventoried=False)).exclude(
-                    id__in=ids).order_by('name')
+                filtered_products = Product.objects.filter(Q(category__isnull=False))
+                search = filtered_products.exclude(id__in=ids).order_by('name')
                 if len(term):
                     search = search.filter(name__icontains=term)
                     search = search[:10]

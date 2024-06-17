@@ -1,4 +1,4 @@
-{% extends 'form.html' %}
+{% extends 'form2.html' %}
 {% load static %}
 {% block head_form %}
     <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
@@ -8,4 +8,76 @@
     <link rel="stylesheet" href="{% static 'lib/bootstrap-touchspin-4.2.5/css/jquery.bootstrap-touchspin.css' %}"/>
     <script src="{% static 'lib/bootstrap-touchspin-4.2.5/js/jquery.bootstrap-touchspin.js' %}"></script>
     <script src="{% static 'scm/product/js/form.js' %}"></script>
+{% endblock %}
+{% block content %}
+<form novalidate class="form"  method="post" action="." enctype="multipart/form-data" id="frmForm"
+data-url="{{ list_url }}" >
+<div class="card {{ dshboard.card }}">
+  <div class="card-header">
+      <h3 class="card-title">
+          {% if action == 'add' %}
+              <i class="fas fa-plus"></i>
+          {% else %}
+              <i class="fas fa-edit"></i>
+          {% endif %}
+          {{ title }}
+      </h3>
+  </div>
+  <div class="card-body" style="display: block;">
+      <div class="container-fluid">
+          <input type="hidden" name="action" id="action" value="{{ action }}">
+          {% csrf_token %}
+          <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>{{ form.name.label }}:</label>
+                        {{ form.name }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>{{ form.category.label }}:</label>
+                        {{ form.category }}
+                    </div>
+                </div>
+                <div class="col-md-6 oculto">
+                    <div class="form-group">
+                        <label>{{ form.price.label }}:</label>
+                        {{ form.price }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>{{ form.pvp.label }}:</label>
+                        {{ form.pvp }}
+                    </div>
+                </div>
+                <div class="col-md-6 oculto">
+                    <div class="form-group">
+                        <label>{{ form.stock.label }}:</label>
+                        {{ form.stock }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>{{ form.image.label }}:</label>
+                        {{ form.image }}
+                    </div>
+                </div>
+          </div>
+      </div>
+  </div>
+  {% block box_footer %}
+      <div class="card-footer">
+          {% block buttons %}
+              <button type="submit" class="btn btn-primary btn-flat">
+                  <i class="fas fa-save"></i> Guardar registro
+              </button>
+              <a href="{{ list_url }}" class="btn btn-danger btn-flat">
+                  <i class="fas fa-times"></i> Cancelar
+              </a>
+          {% endblock %}
+      </div>
+  {% endblock %}
+</div>
 {% endblock %}

@@ -86,6 +86,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=9, decimal_places=2, default=0.00, verbose_name='Precio de Compra')
     pvp = models.DecimalField(max_digits=9, decimal_places=2, default=0.00, verbose_name='Precio de Venta')
     image = models.ImageField(upload_to='product/%Y/%m/%d', verbose_name='Imagen', null=True, blank=True)
+    stock = models.IntegerField(verbose_name='stock', default=1,null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -107,7 +108,9 @@ class Product(models.Model):
         item['sub_total'] = format(self.pvp * 1, '.2f')
         item['dsct'] = 0
         item['cant'] = 1
+        item['stock'] = self.stock
         item['image'] = self.get_image()
+        
         return item
     
     def get_image(self):

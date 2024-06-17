@@ -89,6 +89,7 @@ class ProductCreateView(PermissionMixin, CreateView):
                 product = Product()
                 product.name = request.POST['name']
                 product.category_id = request.POST['category']
+                product.stock = request.POST['stock']
                 if 'image' in request.FILES:
                     product.image = request.FILES['image']
                 product.pvp = float(request.POST['pvp'])
@@ -147,6 +148,7 @@ class ProductUpdateView(PermissionMixin, UpdateView):
                 product = self.object
                 product.name = request.POST['name']
                 product.category_id = request.POST['category']
+                product.stock = request.POST['stock']
                 if 'image-clear' in request.POST:
                     product.remove_image()
                 if 'image' in request.FILES:

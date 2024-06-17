@@ -78,6 +78,16 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         }
                     }
                 },
+                stock: {
+                    validators: {
+                        notEmpty: {},
+                        numeric: {
+                            message: 'El valor no es un número',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        }
+                    }
+                },
             },
         }
     )
@@ -141,10 +151,11 @@ $(function () {
             },
             dataType: 'json',
             success: function (request) {
+                console.log("qwertt")
                 if (!request.hasOwnProperty('error')) {
-                    $(form_group[2]).show();
+                    $('.oculto').show();
                     if (!request.inventoried) {
-                        $(form_group[2]).hide();
+                        $('.oculto').hide();
                     }
                     return false;
                 }
@@ -189,6 +200,39 @@ $(function () {
         })
         .on('change touchspin.on.min touchspin.on.max', function () {
             fv.revalidateField('pvp');
+        })
+        .keypress(function (e) {
+            return validate_decimals($(this), e);
+        });
+    $('input[name="pvp"]')
+        .TouchSpin({
+            min: 0.01,
+            max: 1000000,
+            step: 0.01,
+            decimals: 2,
+            boostat: 5,
+            verticalbuttons: true,
+            maxboostedstep: 10,
+            prefix: 'S/.'
+        })
+        .on('change touchspin.on.min touchspin.on.max', function () {
+            fv.revalidateField('pvp');
+        })
+        .keypress(function (e) {
+            return validate_decimals($(this), e);
+        });
+    
+        $('input[name="stock"]')
+        .TouchSpin({
+            min: 1,
+            max: 1000000,
+            step: 1,
+            boostat: 5,
+            verticalbuttons: true,
+            maxboostedstep: 10,
+        })
+        .on('change touchspin.on.min touchspin.on.max', function () {
+            fv.revalidateField('stock');
         })
         .keypress(function (e) {
             return validate_decimals($(this), e);

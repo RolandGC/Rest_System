@@ -223,27 +223,13 @@ class OrdersListView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['create_url'] = reverse_lazy('sale_admin_create')
-        context['title'] = 'Listado de Ventas'
+        context['create_url'] = reverse_lazy('mesa_list')
+        context['title'] = 'Listado de Pedidos'
         return context
     
 #cambiar estado entregado y cancelado    
-class CambiarEstadoEntregado(View):
-    def post(self, request):
-        data = json.loads(request.body.decode('utf-8'))
-        print(data)
-        sale_id = data.get('sale_id')
-        try:
-            sale = Sale.objects.get(pk=sale_id)
-            sale.estado_entrega = not sale.estado_entrega
-            sale.save()
-            return JsonResponse({'message': 'Estado del pedido cambiado exitosamente'})
-        except Sale.DoesNotExist:
-            return JsonResponse({'error': 'El estado de la mesa especificada no existe'}, status=404)
-        except Exception as e:
-            return JsonResponse({'error123': str(e)}, status=500)
         
-class CambiarEstadoEntregado(View):
+class CambiarEstado(View):
     def post(self, request):
         data = json.loads(request.body.decode('utf-8'))
         print(data)
@@ -256,9 +242,10 @@ class CambiarEstadoEntregado(View):
             if action == 1:
                 sale.estado_entrega = not sale.estado_entrega
             else:
-                sale.estado_pago = not sale.estado_pago
-                mesa.disponibilidad = True
-                mesa.save()
+                if sale.estado_entrega:
+                    sale.estado_pago = not sale.estado_pago
+                    mesa.disponibilidad = not mesa.disponibilidad
+                    mesa.save()
             sale.save()
             return JsonResponse({'message': 'Estado del pedido cambiado exitosamente'})
         except Sale.DoesNotExist:

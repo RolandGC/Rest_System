@@ -120,15 +120,27 @@ var vents = {
             ],
             rowCallback: function(row, data, index) {
                 var tr = $(row).closest('tr');
-                tr.find('input[name="cant"]')
+                if(data.stock != null){
+                    tr.find('input[name="cant"]')
                     .TouchSpin({
                         min: 1,
-                        // max: stock,
+                        max: data.stock,
                         verticalbuttons: true
                     })
-                    .keypress(function(e) {
+                    .keypress(function (e) {
                         return validate_form_text('numbers', e, null);
                     });
+                }else{
+                    tr.find('input[name="cant"]')
+                    .TouchSpin({
+                        min: 1,
+                        max: 30,
+                        verticalbuttons: true
+                    })
+                    .keypress(function (e) {
+                        return validate_form_text('numbers', e, null);
+                    });
+                }
                 tr.find('input[name="dscto_unitary"]')
                     .TouchSpin({
                         min: 0.00,

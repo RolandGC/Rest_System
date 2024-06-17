@@ -30,54 +30,22 @@ function getData(all) {
         columns: [
             {data: "id"},
             {data: "client.user.full_name"},
-            // {data: "payment_condition.name"},
-            // {data: "payment_method.name"},
-            // {data: "type_voucher.name"},
             {data: "date_joined"},
-
             {data: "mesa_numero"},
-            // {data: "estado_entrega"},
-            // {data: "estado_pago"},
             {data: null},
             {data: null},
-
             {data: "total"},
             {data: "id"},
         ],
         columnDefs: [
-            // {
-            //     targets: [2],
-            //     class: 'text-center',
-            //     render: function (data, type, row) {
-            //         if (row.payment_condition.id === 'credito') {
-            //             return '<span class="badge badge-warning">' + row.payment_condition.name + '</span>';
-            //         }
-            //         return '<span class="badge badge-success">' + row.payment_condition.name + '</span>';
-            //     }
-            // },
-            //veterinaria
-            // {
-            //     targets: [6], // Índice de la columna del estado en los datos
-            //     class: 'text-center',
-            //     orderable: true,
-            //     render: function (data, type, row) {
-            //         if (row.estado === false) {
-            //             return '<button class="btn btn-warning btn-xs btn-flat btn-change-status" onclick="cambiarEstado(' + row.id + ')">Pendiente</button>';
-            //         } else {
-            //             return '<button class="btn btn-success btn-xs btn-flat btn-change-status" onclick="cambiarEstado(' + row.id + ')">Atendido</button>';
-            //         }
-            //     }
-            // },
             {
                 targets: [4],
                 class: 'text-center',
                 render: function (data, type, row) {
                     if (row.estado_entrega === true) {
-                        //return '<span class="badge badge-success">' + "Entregado" + '</span>';
-                        return '<button class="btn btn-success btn-xs btn-flat btn-change-status" onclick="cambiarEstado(' + row.id + ',1,' + row.mesa_id +')">Entregado</button>';
+                        return '<button class="btn btn-success btn-xs btn-flat btn-change-status" onclick="cambiarEstado(' + row.id + ',1,' + row.mesa_id +')"><i class="fas fa-check"></i> Entregado</button>';
                     }
-                    //return '<span class="badge badge-warning">' + "Pendiente" + '</span>';
-                    return '<button class="btn btn-warning btn-xs btn-flat btn-change-status" onclick="cambiarEstado(' + row.id + ',1,' + row.mesa_id +')">Pendiente</button>';
+                    return '<button class="btn btn-danger btn-xs btn-flat btn-change-status" onclick="cambiarEstado(' + row.id + ',1,' + row.mesa_id +')"><i class="fas fa-utensils"></i> Entregar</button>';
                 }
             },
             {
@@ -85,20 +53,11 @@ function getData(all) {
                 class: 'text-center',
                 render: function (data, type, row) {
                     if (row.estado_pago === true) {
-                        //return '<span class="badge badge-success">' + "Entregado" + '</span>';
-                        return '<button class="btn btn-success btn-xs btn-flat btn-change-status" onclick="cambiarEstado(' + row.id + ',2,' + row.mesa_id +')">Cancelado</button>';
+                        return '<button class="btn btn-success btn-xs btn-flat btn-change-status" onclick="cambiarEstado(' + row.id + ',2,' + row.mesa_id +')"><i class="fas fa-check"></i> Cancelado</button>';
                     }
-                    //return '<span class="badge badge-warning">' + "Pendiente" + '</span>';
-                    return '<button class="btn btn-warning btn-xs btn-flat btn-change-status" onclick="cambiarEstado(' + row.id + ',2,' + row.mesa_id +')">Por cancelar</button>';;
+                    return '<button class="btn btn-info btn-xs btn-flat btn-change-status" onclick="cambiarEstado(' + row.id + ',2,' + row.mesa_id +',' + row.estado_entrega +')"><i class="fas fa-money-bill"></i> Cobrar</button>';
                 }
             },
-            // {
-            //     targets: [3, 4, 5],
-            //     class: 'text-center',
-            //     render: function (data, type, row) {
-            //         return data;
-            //     }
-            // },
             {
                 targets: [-2],
                 class: 'text-center',
@@ -192,13 +151,7 @@ $(function () {
 
             var invoice = [];
             invoice.push({'id': 'Cliente', 'name': row.client.user.full_name});
-            invoice.push({'id': 'Forma de Pago', 'name': row.payment_condition.name});
-            invoice.push({'id': 'Método de Pago', 'name': row.payment_method.name});
             invoice.push({'id': 'Subtotal', 'name': 'S/.' + row.subtotal});
-            invoice.push({'id': 'Igv', 'name': row.igv + ' %'});
-            invoice.push({'id': 'Total Igv', 'name': 'S/.' + row.total_igv});
-            invoice.push({'id': 'Descuento', 'name': row.dscto + ' %'});
-            invoice.push({'id': 'Total Descuento', 'name': 'S/.' + row.total_dscto});
             invoice.push({'id': 'Total a pagar', 'name': 'S/.' + row.total});
             if (row.payment_method.id === 'efectivo') {
                 invoice.push({'id': 'Efectivo', 'name': 'S/.' + row.cash});
@@ -268,8 +221,12 @@ $(function () {
 });
 
 //veterinaria
-function cambiarEstado(sale_id,action,mesa_id) {
-    console.log(mesa_id)
+function cambiarEstado(sale_id,action,mesa_id,estado_entrega) {
+    if(arguments.length==4){
+        if(action==2 && !estado_entrega){
+            return alert("Este pedido aún no se ha entregado")
+        }
+    }
     fetch('/pos/scm/orders/updatestate/', {
         method: 'POST',
         headers: {

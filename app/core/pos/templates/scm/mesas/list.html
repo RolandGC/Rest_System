@@ -36,7 +36,7 @@
                 <h4 class="text-center">Mesa N° {{mesa.numero_mesa}}</h4>
                 {% if mesa.disponibilidad %}
                     <img class="card-mesa mx-auto" data-mesaid="{{mesa.id}}" src="{% static '/img/mesa-green.png' %}" alt="" width="250">
-                {% else %}-
+                {% else %}
                     <img class="card-mesa mx-auto" data-mesaid="{{mesa.id}}" src="{% static '/img/mesa-red.png' %}" alt="" width="250">
                 {% endif %}
                 <div class="position-absolute d-flex justify-content-center" style="width: 245px; margin: 0 auto;bottom:18px; column-gap:20px">
